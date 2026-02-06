@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Papeleta Digital Pro - Essalud</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Arial&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #00d2ff;
+            --secondary: #3a7bd5;
+            --accent: #ff007a;
+            --bg-dark: #0f172a;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-light: #f1f5f9;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: radial-gradient(circle at top right, #1e293b, #0f172a);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .dashboard-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin-bottom: 25px;
+            min-height: 80px;
+        }
+
+        .logo-web {
+            position: absolute;
+            left: 0;
+            height: 55px;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
+        }
+
+        .logo-gif {
+            position: absolute;
+            right: 0;
+            height: 60px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .logo-gif:hover {
+            transform: scale(1.1);
+            filter: brightness(1.2);
+        }
+
+        /* --- CREDITS MODAL --- */
+        .modal-credits {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 10000000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .credits-card {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border: 2px solid var(--primary);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(0, 210, 255, 0.3);
+        }
+
+        .credits-card h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            text-decoration: underline;
+        }
+
+        .credits-card h3 {
+            color: #f1f5f9;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .credits-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .credits-card li {
+            margin: 8px 0;
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+
+        .credits-card .author {
+            color: #38bdf8;
+            font-weight: bold;
+            margin: 15px 0;
+            padding: 10px;
+            border: 1px dashed #38bdf8;
+            border-radius: 10px;
+        }
+
+        .btn-close-modal {
+            margin-top: 25px;
+            background: var(--primary);
+            color: #0f172a;
+            padding: 10px 25px;
+            border-radius: 10px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .top-bar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 12px;
+            border-radius: 16px;
+            align-items: center;
+        }
+
+        .search-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            padding: 10px 18px;
+            border-radius: 12px;
+            color: white;
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .input-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #38bdf8;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .styled-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            padding: 12px;
+            border-radius: 10px;
+            color: white;
+            font-size: 0.95rem;
+        }
+
+        .permission-types {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            border-radius: 16px;
+            margin-top: 15px;
+        }
+
+        .check-card {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+        }
+
+        .btn-load {
+            background: #475569;
+            color: white;
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+
+        .btn-backup {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+
+        .btn-print {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* --- PRINT STYLES (ARIAL 12, LANDSCAPE, ROUNDED BOXES) --- */
+        #print-wrapper {
+            display: none;
+        }
+
+        @media print {
+            @page {
+                size: A4 landscape;
+                margin: 0.5cm;
+            }
+
+            body {
+                background: white !important;
+                padding: 0;
+                display: block;
+                overflow: visible;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+
+            #print-wrapper {
+                display: flex;
+                justify-content: space-between;
+                gap: 15px;
+                color: black;
+                font-family: 'Arial', sans-serif;
+                font-size: 12pt;
+                width: 100%;
+            }
+
+            .slip {
+                width: 49%;
+                border: 1px solid #777;
+                padding: 15px;
+                position: relative;
+                min-height: 19.5cm;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .p-header {
+                display: flex;
+                align-items: center;
+                border-bottom: 2pt solid black;
+                padding-bottom: 10px;
+                margin-bottom: 15px;
+            }
+
+            .p-logo {
+                height: 50px;
+                margin-right: 15px;
+            }
+
+            .p-title-box {
+                flex-grow: 1;
+                text-align: center;
+            }
+
+            .p-title {
+                font-family: 'Outfit', sans-serif;
+                font-size: 16pt;
+                font-weight: bold;
+                margin: 0;
+            }
+
+            .p-copy-label {
+                position: absolute;
+                top: 10px;
+                right: 15px;
+                font-weight: bold;
+                font-size: 11pt;
+                text-decoration: underline;
+                color: #444;
+            }
+
+            .p-body {
+                line-height: 1.6;
+                margin-bottom: 15px;
+            }
+
+            .p-check-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 3px;
+                font-size: 9pt;
+                margin-bottom: 8px;
+            }
+
+            .box {
+                display: inline-block;
+                width: 10pt;
+                height: 10pt;
+                border: 1pt solid black;
+                margin-right: 4px;
+                text-align: center;
+                line-height: 10pt;
+                font-weight: bold;
+            }
+
+            /* CAJAS SEPARADAS CON PUNTAS REDONDAS */
+            .p-time-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+                margin: 8px 0;
+            }
+
+            .p-time-cell {
+                border: 1.2pt solid black;
+                border-radius: 10px;
+                padding: 6px 10px;
+                background: #fafafa;
+                font-size: 11pt;
+            }
+
+            .p-time-cell b {
+                color: #000;
+            }
+
+            .p-full-field {
+                border: 1.5pt solid black;
+                border-radius: 12px;
+                padding: 8px 12px;
+                margin-top: 10px;
+            }
+
+            /* FIRMAS CON BASTANTE ESPACIO */
+            .p-sign-row {
+                display: flex;
+                justify-content: space-between;
+                margin-top: auto;
+                padding-top: 50px;
+                text-align: center;
+                font-size: 9pt;
+                padding-bottom: 10px;
+            }
+
+            .p-sign-box {
+                width: 31%;
+                border-top: 1pt solid black;
+                padding-top: 5px;
+            }
+
+            /* NOTAS AL PIE ARIAL 8 UNA DEBAJO DE OTRA */
+            .p-footer {
+                font-size: 7.5pt;
+                margin-top: 10px;
+                line-height: 1.3;
+                border-top: 1pt solid #aaa;
+                padding-top: 8px;
+                font-family: 'Arial', sans-serif;
+            }
+
+            .p-footer span {
+                display: block;
+                margin-bottom: 2px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="dashboard-card no-print">
+        <div class="dashboard-header">
+            <img src="logo_essalud.png" alt="EsSalud Logo" class="logo-web">
+            <h1 class="main-title">Papeleta Digital</h1>
+            <img src="LogoEsSalud.GIF" alt="EsSalud GIF" class="logo-gif" onclick="toggleCredits(true)">
+        </div>
+        <p class="sub-title">Gestión de Permisos • Red Interna Essalud</p>
+
+        <div class="top-bar">
+            <i class="fas fa-search" style="color: var(--primary)"></i>
+            <input type="text" id="busqueda-dni" class="search-input"
+                placeholder="Ingresar DNI para cargar datos anteriores...">
+            <button class="btn btn-load" onclick="cargarDatos()"><i class="fas fa-folder-open"></i> Cargar</button>
+        </div>
+
+        <div class="form-grid">
+            <div class="input-group">
+                <label><i class="fas fa-user-tie"></i> Jefe de RR.HH.</label>
+                <input type="text" id="jefe_rrhh" class="styled-input" value="JUAN CARLOS RAMIREZ GRAU">
+            </div>
+            <div class="input-group">
+                <label><i class="fas fa-hashtag"></i> Anexo Nº</label>
+                <input type="text" id="anexo_no" class="styled-input" value="07">
+            </div>
+            <div class="input-group full-width">
+                <label><i class="fas fa-user"></i> Nombre del Trabajador</label>
+                <input type="text" id="nombre_trabajador" class="styled-input">
+            </div>
+            <div class="input-group">
+                <label><i class="fas fa-briefcase"></i> Área / Servicio</label>
+                <input type="text" id="area_trabajador" class="styled-input">
+            </div>
+            <div class="input-group">
+                <label><i class="fas fa-id-card"></i> DNI del Trabajador</label>
+                <input type="text" id="trabajador_dni" class="styled-input">
+            </div>
+
+            <div class="full-width">
+                <label><i class="fas fa-list-check"></i> Motivo del Permiso</label>
+                <div class="permission-types">
+                    <label class="check-card"><input type="checkbox" id="chk1"> Atención Médica</label>
+                    <label class="check-card"><input type="checkbox" id="chk2"> Onomástico</label>
+                    <label class="check-card"><input type="checkbox" id="chk3"> Lic. Enf. Fam.</label>
+                    <label class="check-card"><input type="checkbox" id="chk4"> Comisión Servicio</label>
+                    <label class="check-card"><input type="checkbox" id="chk5"> Permiso por Días</label>
+                    <label class="check-card"><input type="checkbox" id="chk6"> Lic. Judicial</label>
+                    <label class="check-card"><input type="checkbox" id="chk7"> Capac. Oficial</label>
+                    <label class="check-card"><input type="checkbox" id="chk8"> Permiso Minutos</label>
+                    <label class="check-card"><input type="checkbox" id="chk9"> Sindicato</label>
+                    <label class="check-card"><input type="checkbox" id="chk10"> Capac. No Oficial</label>
+                    <label class="check-card"><input type="checkbox" id="chk11"> Vacaciones</label>
+                    <label class="check-card"><input type="checkbox" id="chk12"> Sufragio</label>
+                    <label class="check-card"><input type="checkbox" id="chk13"> Descanso Técnico</label>
+                    <label class="check-card"><input type="checkbox" id="chk14"> Lic. Paternidad</label>
+                    <label class="check-card"><input type="checkbox" id="chk15"> Comité</label>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label><i class="fas fa-calendar-alt"></i> Fecha de Salida</label>
+                <input type="date" id="fecha_salida" class="styled-input">
+            </div>
+            <div class="input-group">
+                <label><i class="fas fa-clock"></i> Hora de Salida</label>
+                <input type="time" id="hora_salida" class="styled-input">
+            </div>
+            <div class="input-group">
+                <label><i class="fas fa-calendar-check"></i> Fecha de Retorno</label>
+                <input type="date" id="fecha_retorno" class="styled-input">
+            </div>
+            <div class="input-group">
+                <label><i class="fas fa-history"></i> Hora de Retorno</label>
+                <input type="time" id="hora_retorno" class="styled-input">
+            </div>
+            <div class="input-group">
+                <label><i class="fas fa-hourglass-half"></i> Total Horas/Días</label>
+                <input type="text" id="total_tiempo" class="styled-input">
+            </div>
+            <div class="input-group">
+                <label><i class="fas fa-calendar-day"></i> Fecha de Emisión</label>
+                <input type="date" id="fecha_solicitud" class="styled-input">
+            </div>
+            <div class="input-group full-width">
+                <label><i class="fas fa-location-dot"></i> Lugar al que se dirige</label>
+                <input type="text" id="lugar_dirigido" class="styled-input">
+            </div>
+            <div class="input-group full-width">
+                <label><i class="fas fa-comment-dots"></i> MotivoDetallado</label>
+                <textarea id="motivo_permiso" class="styled-input" rows="2"></textarea>
+            </div>
+        </div>
+
+        <div class="btn-container">
+            <button class="btn btn-save" onclick="guardarDatos()"><i class="fas fa-save"></i> Guardar Todo</button>
+            <button class="btn btn-backup" onclick="descargarCopia()"><i class="fas fa-download"></i> Descargar
+                Copia</button>
+            <button class="btn btn-print" onclick="prepararEImprimir()"><i class="fas fa-file-pdf"></i>
+                Imprimir</button>
+            <button class="btn btn-exit" onclick="confirmarSalida()"><i class="fas fa-power-off"></i> Salir</button>
+        </div>
+    </div>
+
+
+
+    <div id="print-wrapper">
+        <div id="copy-original" class="slip"></div>
+        <div id="copy-cargo" class="slip"></div>
+    </div>
+
+    <!-- MODAL DE CRÉDITOS -->
+    <div id="modal-credits" class="modal-credits">
+        <div class="credits-card">
+            <h2>Oficina de Soporte Informático</h2>
+            <h3>Equipo de Trabajo:</h3>
+            <ul>
+                <li>Ing. Dini Lawrence Vargas Tumba – Jefe de Oficina</li>
+                <li class="author">Ing. Amaro Alexisy Vilela Vargas<br><small>Autor del Formulario Digital</small></li>
+                <li>Ing. Carlos Vereau</li>
+                <li>Ing. Juan Carlos Soto</li>
+                <li>Ing. Cesar Sánchez</li>
+                <li>Ing. Alex Alayo</li>
+                <li>Lic. Zayda Neyra</li>
+            </ul>
+            <button class="btn-close-modal" onclick="toggleCredits(false)">CERRAR</button>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://' + window.location.hostname + ':4000/api';
+        document.getElementById('fecha_solicitud').valueAsDate = new Date();
+
+        function toggleCredits(show) {
+            document.getElementById('modal-credits').style.display = show ? 'flex' : 'none';
+        }
+
+        async function guardarDatos() {
+            // Intentar obtener el DNI de ambos campos posibles (el de arriba o el de la firma)
+            let dni = document.getElementById('trabajador_dni').value.trim();
+            if (!dni) dni = document.getElementById('busqueda-dni').value.trim();
+
+            if (!dni) {
+                alert("❌ ¡Falta el DNI! Por favor ingréselo en el campo de 'DNI del Trabajador' o en la búsqueda.");
+                return;
+            }
+
+            const datos = {};
+            // Capturar todos los inputs (textos, fechas, horas)
+            document.querySelectorAll('input, textarea').forEach(el => {
+                if (el.id) {
+                    if (el.type === 'checkbox') datos[el.id] = el.checked;
+                    else datos[el.id] = el.value;
+                }
+            });
+
+            // Forzar que el dni principal sea el detectado
+            datos.dni = dni;
+
+            try {
+                const res = await fetch(`${API_URL}/save`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(datos)
+                });
+
+                if (res.ok) {
+                    alert(`✅ ¡Papeleta de DNI ${dni} guardada con éxito en la carpeta /data!`);
+                } else {
+                    const err = await res.json();
+                    alert("❌ Error del servidor: " + err.error);
+                }
+            } catch (e) {
+                alert("❌ No se pudo conectar con el servidor. Verifique que la ventana negra (CMD) esté abierta.");
+            }
+        }
+
+        function descargarCopia() {
+            const dni = document.getElementById('trabajador_dni').value.trim();
+            if (!dni) { alert("Ingrese el DNI para identificar el archivo."); return; }
+
+            const datos = {};
+            document.querySelectorAll('input, textarea').forEach(el => {
+                if (el.id) {
+                    if (el.type === 'checkbox') datos[el.id] = el.checked;
+                    else datos[el.id] = el.value;
+                }
+            });
+
+            const blob = new Blob([JSON.stringify(datos, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Papeleta_${dni}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function confirmarSalida() {
+            if (confirm("¿Está seguro que desea cerrar el formulario? Se perderán los datos no guardados.")) {
+                location.reload();
+            }
+        }
+
+        async function cargarDatos() {
+            const dni = document.getElementById('busqueda-dni').value;
+            const res = await fetch(`${API_URL}/load/${dni}`);
+            if (res.status === 404) { alert("No hallado"); return; }
+            const d = await res.json();
+            document.querySelectorAll('input, textarea').forEach(el => {
+                if (d[el.id] !== undefined) {
+                    if (el.type === 'checkbox') el.checked = d[el.id];
+                    else el.value = d[el.id];
+                }
+            });
+            alert("✓ Cargado");
+        }
+
+        function prepararEImprimir() {
+            const getVal = id => document.getElementById(id).value;
+            const checks = {
+                chk1: "ATENCIÓN MÉDICA", chk2: "ONOMÁSTICO", chk3: "LIC. ENF. FAM.",
+                chk4: "COMISIÓN SERV.", chk5: "PERMISO DÍAS", chk6: "LIC. JUDICIAL",
+                chk7: "CAPAC. OFICIAL", chk8: "PERMISO MINUTOS", chk9: "SINDICATO",
+                chk10: "CAPAC. NO OFIC.", chk11: "VACACIONES", chk12: "SUFRAGIO",
+                chk13: "DESC. TÉC. MED.", chk14: "LIC. PATERNIDAD", chk15: "COMITÉ"
+            };
+
+            const buildSlipHTML = (typeLabel) => `
+                <div class="p-copy-label">${typeLabel}</div>
+                <div class="p-header">
+                    <img src="logo_essalud.png" class="p-logo">
+                    <div class="p-title-box">
+                        <h2 class="p-title">PAPELETA DE PERMISO</h2>
+                        <small>ANEXO Nº: ${getVal('anexo_no')}</small>
+                    </div>
+                </div>
+                <div class="p-body">
+                    SEÑOR (A) JEFE DE LA DIVISION DE RECURSOS HUMANOS: <b>${getVal('jefe_rrhh')}</b>; 
+                    Don (ña) <b>${getVal('nombre_trabajador')}</b> quien presta servicios en: <b>${getVal('area_trabajador')}</b> 
+                    A órdenes directas del Suscrito, solicita permiso por:
+                </div>
+                <div class="p-check-grid">
+                    ${Object.entries(checks).map(([id, label]) => `
+                        <div><span class="box">${document.getElementById(id).checked ? 'X' : ''}</span> ${label}</div>
+                    `).join('')}
+                </div>
+                <div class="p-time-grid">
+                    <div class="p-time-cell">SALIDA: <b>${getVal('fecha_salida')} ${getVal('hora_salida')}</b></div>
+                    <div class="p-time-cell">Nº TOTAL: <b>${getVal('total_tiempo')}</b></div>
+                    <div class="p-time-cell">RETORNO: <b>${getVal('fecha_retorno')} ${getVal('hora_retorno')}</b></div>
+                    <div class="p-time-cell">FECHA EMISIÓN: <b>${getVal('fecha_solicitud')}</b></div>
+                </div>
+                <div class="p-full-field">
+                    Lugar al cuál se dirige (*): <b>${getVal('lugar_dirigido')}</b><br>
+                    Motivo: <b>${getVal('motivo_permiso')}</b>
+                </div>
+                <div class="p-sign-row">
+                    <div class="p-sign-box">Firma del Solicitante<br>DNI: ${getVal('trabajador_dni')}</div>
+                    <div class="p-sign-box">Firma Jefe Inmediato</div>
+                    <div class="p-sign-box">Jefe RR.HH. RALL</div>
+                </div>
+                <div class="p-footer">
+                    <span>(1) Adjuntar constancia de atención</span>
+                    <span>(2) Indicar lugar y motivo de la comisión</span>
+                    <span>(3) Se deberá efectuar la devolución de hora / Reg. Laboral 728 y CAS</span>
+                    <span>(4) Ley Nº 28456 - tercera Disposiciones Transitorias, Complementarias y Finales</span>
+                    <span>(5) Permiso por Días: Indicar número de días y días de inicio y término (Más 10 días)</span>
+                    <span>(6) Permiso por horas: indicar número de horas y hora de salida o entrada</span>
+                    <span>(7) Regularizar posteriormente con resolución</span>
+                    <span>(*) Indicar solo por comisión de servicios</span>
+                </div>
+            `;
+
+            document.getElementById('copy-original').innerHTML = buildSlipHTML("ORIGINAL");
+            document.getElementById('copy-cargo').innerHTML = buildSlipHTML("CARGO / COPIA");
+            window.print();
+        }
+    </script>
+</body>
+
+</html>
