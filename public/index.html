@@ -27,13 +27,41 @@
 
         body {
             font-family: 'Outfit', sans-serif;
-            background: radial-gradient(circle at top right, #1e293b, #0f172a);
+            background: url('Wallpaper.jpg') no-repeat center center fixed;
+            background-size: cover;
             color: var(--text-light);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 20px;
+            position: relative;
+        }
+
+        /* Capa oscura para hacer la imagen más tenue y elegante */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.65);
+            /* Controla aquí la opacidad del fondo */
+            z-index: -1;
+        }
+
+        /* Contenedor con efecto cristal más refinado */
+        .dashboard-card {
+            background: rgba(30, 41, 59, 0.4) !important;
+            backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 24px;
+            max-width: 900px;
+            width: 100%;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            z-index: 1;
         }
 
         .dashboard-header {
@@ -202,6 +230,12 @@
             font-size: 0.95rem;
         }
 
+        /* Color blanco para los iconos de fecha y hora (Calendario/Reloj) */
+        .styled-input::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            cursor: pointer;
+        }
+
         .permission-types {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -216,8 +250,74 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             cursor: pointer;
+        }
+
+        /* Estilos para botones de selección de lugar */
+        .dest-type-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .btn-dest {
+            flex: 1;
+            padding: 8px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: white;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: 0.3s;
+        }
+
+        .btn-dest.active {
+            background: var(--primary);
+            color: #0f172a;
+            border-color: var(--primary);
+            font-weight: bold;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Soporte para cambio de orientación en impresión */
+        @media print {
+            body.print-mode-full {
+                display: block;
+            }
+
+            body.print-mode-full #print-wrapper {
+                flex-direction: column;
+                display: block;
+            }
+
+            body.print-mode-full .slip {
+                width: 100% !important;
+                min-height: 27cm !important;
+                font-size: 14pt !important;
+                border: none !important;
+            }
+
+            body.print-mode-full #copy-cargo {
+                display: none !important;
+            }
+
+            body.print-mode-full .p-title {
+                font-size: 24pt !important;
+            }
+
+            body.print-mode-full .p-logo {
+                height: 100px !important;
+            }
+
+            body.print-mode-full .p-footer {
+                font-size: 10pt !important;
+                margin-top: 30px;
+            }
         }
 
         .btn-container {
@@ -430,7 +530,6 @@
 
     <div class="dashboard-card no-print">
         <div class="dashboard-header">
-            <img src="logo_essalud.png" alt="EsSalud Logo" class="logo-web">
             <h1 class="main-title">Papeleta Digital</h1>
             <img src="LogoEsSalud.GIF" alt="EsSalud GIF" class="logo-gif" onclick="toggleCredits(true)">
         </div>
@@ -512,7 +611,63 @@
             </div>
             <div class="input-group full-width">
                 <label><i class="fas fa-location-dot"></i> Lugar al que se dirige</label>
-                <input type="text" id="lugar_dirigido" class="styled-input">
+
+                <div class="dest-type-selector">
+                    <button type="button" class="btn-dest active" id="btn-rall"
+                        onclick="setDestType('rall')">Establecimientos de la RALL</button>
+                    <button type="button" class="btn-dest" id="btn-externo"
+                        onclick="setDestType('externo')">Externo</button>
+                </div>
+
+                <select id="lugar_dirigido_select" class="styled-input">
+                    <option value="" style="background: #1e293b;">-- Seleccione Establecimiento RALL --</option>
+                    <option value="HOSPITAL NACIONAL VIRGEN DE LA PUERTA" style="background: #1e293b;">HOSPITAL NACIONAL
+                        VIRGEN DE LA PUERTA</option>
+                    <option value="HOSPITAL VICTOR LAZARTE" style="background: #1e293b;">HOSPITAL VICTOR LAZARTE
+                    </option>
+                    <option value="HOSPITAL II CHOCOPE" style="background: #1e293b;">HOSPITAL II CHOCOPE</option>
+                    <option value="HOSPITAL I ALBRECHT" style="background: #1e293b;">HOSPITAL I ALBRECHT</option>
+                    <option value="HOSPITAL I PACASMAYO" style="background: #1e293b;">HOSPITAL I PACASMAYO</option>
+                    <option value="HOSPITAL I FLORENCIA DE MORA" style="background: #1e293b;">HOSPITAL I FLORENCIA DE
+                        MORA</option>
+                    <option value="HOSPITAL I LA ESPERANZA" style="background: #1e293b;">HOSPITAL I LA ESPERANZA
+                    </option>
+                    <option value="HOSPITAL I MOCHE" style="background: #1e293b;">HOSPITAL I MOCHE</option>
+                    <option value="HOSPITAL I VIRU" style="background: #1e293b;">HOSPITAL I VIRU</option>
+                    <option value="HOSPITAL I CHAO" style="background: #1e293b;">HOSPITAL I CHAO</option>
+                    <option value="CME CASA GRANDE" style="background: #1e293b;">CME CASA GRANDE</option>
+                    <option value="CM ASCOPE" style="background: #1e293b;">CM ASCOPE</option>
+                    <option value="POLICLINICO EL PORVENIR" style="background: #1e293b;">POLICLINICO EL PORVENIR
+                    </option>
+                    <option value="POLICLINICO LARCO" style="background: #1e293b;">POLICLINICO LARCO</option>
+                    <option value="CAP. III METROPOLITANO" style="background: #1e293b;">CAP. III METROPOLITANO</option>
+                    <option value="CAP. II GUADALUPE" style="background: #1e293b;">CAP. II GUADALUPE</option>
+                    <option value="CAP. II HUAMACHUCO" style="background: #1e293b;">CAP. II HUAMACHUCO</option>
+                    <option value="CAP. II LAREDO" style="background: #1e293b;">CAP. II LAREDO</option>
+                    <option value="CAP. II OTUZCO" style="background: #1e293b;">CAP. II OTUZCO</option>
+                    <option value="CAP. I CASCAS" style="background: #1e293b;">CAP. I CASCAS</option>
+                    <option value="CAP. I CHICAMA" style="background: #1e293b;">CAP. I CHICAMA</option>
+                    <option value="CAP. I MALABRIGO" style="background: #1e293b;">CAP. I MALABRIGO</option>
+                    <option value="CAP. I SALAVERRY" style="background: #1e293b;">CAP. I SALAVERRY</option>
+                    <option value="CAP. I SAN PEDRO" style="background: #1e293b;">CAP. I SAN PEDRO</option>
+                    <option value="CAP. I SOLEDAD" style="background: #1e293b;">CAP. I SOLEDAD</option>
+                    <option value="CAP. I TAYABAMBA" style="background: #1e293b;">CAP. I TAYABAMBA</option>
+                    <option value="PM CARTAVIO" style="background: #1e293b;">PM CARTAVIO</option>
+                    <option value="PM JEQUETEPEQUE" style="background: #1e293b;">PM JEQUETEPEQUE</option>
+                    <option value="PM LIMONCARRO" style="background: #1e293b;">PM LIMONCARRO</option>
+                    <option value="PM QUIRUVILCA" style="background: #1e293b;">PM QUIRUVILCA</option>
+                    <option value="PM SAN JOSE" style="background: #1e293b;">PM SAN JOSE</option>
+                    <option value="PM STGO DE CHUCO" style="background: #1e293b;">PM STGO DE CHUCO</option>
+                    <option value="PM SAUSAL" style="background: #1e293b;">PM SAUSAL</option>
+                    <option value="PM PAIJAN" style="background: #1e293b;">PM PAIJAN</option>
+                    <option value="PM SANTIAGO DE CAO" style="background: #1e293b;">PM SANTIAGO DE CAO</option>
+                    <option value="CM HUANCHACO" style="background: #1e293b;">CM HUANCHACO</option>
+                    <option value="ALMACEN CENTRAL (Urb los Jardines)" style="background: #1e293b;">ALMACEN CENTRAL (Urb
+                        los Jardines)</option>
+                </select>
+
+                <input type="text" id="lugar_dirigido_externo" class="styled-input hidden"
+                    placeholder="Ingrese el lugar de destino externo...">
             </div>
             <div class="input-group full-width">
                 <label><i class="fas fa-comment-dots"></i> MotivoDetallado</label>
@@ -522,10 +677,11 @@
 
         <div class="btn-container">
             <button class="btn btn-save" onclick="guardarDatos()"><i class="fas fa-save"></i> Guardar Todo</button>
-            <button class="btn btn-backup" onclick="descargarCopia()"><i class="fas fa-download"></i> Descargar
-                Copia</button>
-            <button class="btn btn-print" onclick="prepararEImprimir()"><i class="fas fa-file-pdf"></i>
-                Imprimir</button>
+            <button class="btn btn-backup" onclick="prepararEImprimir(false)"
+                title="Dos copias en una hoja horizontal"><i class="fas fa-file-pdf"></i> PDF (2 Copias)</button>
+            <button class="btn btn-backup" style="background: linear-gradient(135deg, #6366f1, #4338ca);"
+                onclick="prepararEImprimir(true)" title="Una sola papeleta en toda la hoja A4"><i
+                    class="fas fa-file-invoice"></i> PDF (A4 Completo)</button>
             <button class="btn btn-exit" onclick="confirmarSalida()"><i class="fas fa-power-off"></i> Salir</button>
         </div>
     </div>
@@ -603,30 +759,30 @@
             }
         }
 
-        function descargarCopia() {
-            const dni = document.getElementById('trabajador_dni').value.trim();
-            if (!dni) { alert("Ingrese el DNI para identificar el archivo."); return; }
 
-            const datos = {};
-            document.querySelectorAll('input, textarea').forEach(el => {
-                if (el.id) {
-                    if (el.type === 'checkbox') datos[el.id] = el.checked;
-                    else datos[el.id] = el.value;
-                }
-            });
-
-            const blob = new Blob([JSON.stringify(datos, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `Papeleta_${dni}.json`;
-            a.click();
-            URL.revokeObjectURL(url);
-        }
 
         function confirmarSalida() {
             if (confirm("¿Está seguro que desea cerrar el formulario? Se perderán los datos no guardados.")) {
-                location.reload();
+                window.location.href = "http://172.27.56.25:3000/index.html";
+            }
+        }
+
+        function setDestType(type) {
+            const btnRall = document.getElementById('btn-rall');
+            const btnExterno = document.getElementById('btn-externo');
+            const selectRall = document.getElementById('lugar_dirigido_select');
+            const inputExterno = document.getElementById('lugar_dirigido_externo');
+
+            if (type === 'rall') {
+                btnRall.classList.add('active');
+                btnExterno.classList.remove('active');
+                selectRall.classList.remove('hidden');
+                inputExterno.classList.add('hidden');
+            } else {
+                btnRall.classList.remove('active');
+                btnExterno.classList.add('active');
+                selectRall.classList.add('hidden');
+                inputExterno.classList.remove('hidden');
             }
         }
 
@@ -641,10 +797,15 @@
                     else el.value = d[el.id];
                 }
             });
+
+            // Cargar el tipo de destino (RALL o Externo)
+            if (d.lugar_dirigido_externo) setDestType('externo');
+            else setDestType('rall');
+
             alert("✓ Cargado");
         }
 
-        function prepararEImprimir() {
+        function prepararEImprimir(fullPage = false) {
             const getVal = id => document.getElementById(id).value;
             const checks = {
                 chk1: "ATENCIÓN MÉDICA", chk2: "ONOMÁSTICO", chk3: "LIC. ENF. FAM.",
@@ -654,10 +815,29 @@
                 chk13: "DESC. TÉC. MED.", chk14: "LIC. PATERNIDAD", chk15: "COMITÉ"
             };
 
+            // Determinar qué valor de lugar usar
+            const isRall = document.getElementById('btn-rall').classList.contains('active');
+            const lugarParaImprimir = isRall ? document.getElementById('lugar_dirigido_select').value : document.getElementById('lugar_dirigido_externo').value;
+
+            // Manejo de estilos para el tamaño de hoja
+            const existingStyle = document.getElementById('dynamic-print-style');
+            if (existingStyle) existingStyle.remove();
+
+            const style = document.createElement('style');
+            style.id = 'dynamic-print-style';
+            if (fullPage) {
+                style.innerHTML = `@media print { @page { size: A4 portrait; margin: 1cm; } }`;
+                document.body.classList.add('print-mode-full');
+            } else {
+                style.innerHTML = `@media print { @page { size: A4 landscape; margin: 0.5cm; } }`;
+                document.body.classList.remove('print-mode-full');
+            }
+            document.head.appendChild(style);
+
             const buildSlipHTML = (typeLabel) => `
-                <div class="p-copy-label">${typeLabel}</div>
+                <div class="p-copy-label">${fullPage ? '' : typeLabel}</div>
                 <div class="p-header">
-                    <img src="logo_essalud.png" class="p-logo">
+                    <img src="OK logo_essalud.png" class="p-logo">
                     <div class="p-title-box">
                         <h2 class="p-title">PAPELETA DE PERMISO</h2>
                         <small>ANEXO Nº: ${getVal('anexo_no')}</small>
@@ -680,10 +860,10 @@
                     <div class="p-time-cell">FECHA EMISIÓN: <b>${getVal('fecha_solicitud')}</b></div>
                 </div>
                 <div class="p-full-field">
-                    Lugar al cuál se dirige (*): <b>${getVal('lugar_dirigido')}</b><br>
+                    Lugar al cuál se dirige (*): <b>${lugarParaImprimir}</b><br>
                     Motivo: <b>${getVal('motivo_permiso')}</b>
                 </div>
-                <div class="p-sign-row">
+                <div class="p-sign-row" style="${fullPage ? 'margin-top: 100px;' : ''}">
                     <div class="p-sign-box">Firma del Solicitante<br>DNI: ${getVal('trabajador_dni')}</div>
                     <div class="p-sign-box">Firma Jefe Inmediato</div>
                     <div class="p-sign-box">Jefe RR.HH. RALL</div>
@@ -701,8 +881,14 @@
             `;
 
             document.getElementById('copy-original').innerHTML = buildSlipHTML("ORIGINAL");
-            document.getElementById('copy-cargo').innerHTML = buildSlipHTML("CARGO / COPIA");
-            window.print();
+            if (!fullPage) {
+                document.getElementById('copy-cargo').innerHTML = buildSlipHTML("CARGO / COPIA");
+            }
+
+            // Un pequeño delay para que el DOM se actualice antes de imprimir
+            setTimeout(() => {
+                window.print();
+            }, 250);
         }
     </script>
 </body>
