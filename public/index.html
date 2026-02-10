@@ -5,18 +5,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Papeleta Digital Pro - Essalud</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Arial&display=swap"
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Roboto:wght@300;400;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #00d2ff;
-            --secondary: #3a7bd5;
-            --accent: #ff007a;
-            --bg-dark: #0f172a;
-            --glass: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --text-light: #f1f5f9;
+            --primary: #004b98;
+            --secondary: #0072ce;
+            --accent: #d32f2f;
+            --bg-body: #f4f7f9;
+            --card-bg: #ffffff;
+            --text-dark: #333333;
+            --text-muted: #64748b;
+            --field-border: #ced4da;
         }
 
         * {
@@ -26,14 +28,26 @@
         }
 
         body {
-            font-family: 'Outfit', sans-serif;
-            background: radial-gradient(circle at top right, #1e293b, #0f172a);
-            color: var(--text-light);
+            font-family: 'Montserrat', sans-serif;
+            background: var(--bg-body);
+            color: var(--text-dark);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px;
+            padding: 40px 20px;
+        }
+
+        /* Contenedor oficial estilo tarjeta */
+        .dashboard-card {
+            background: var(--card-bg);
+            border: 1px solid #e0e0e0;
+            padding: 40px;
+            border-radius: 12px;
+            max-width: 1000px;
+            width: 100%;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            z-index: 1;
         }
 
         .dashboard-header {
@@ -42,7 +56,57 @@
             justify-content: center;
             position: relative;
             margin-bottom: 25px;
-            min-height: 80px;
+            padding: 20px 0;
+            border-bottom: 2px solid #e0e0e0;
+            background: linear-gradient(to right, transparent, rgba(0, 75, 152, 0.03), transparent);
+        }
+
+        .header-stripe {
+            position: absolute;
+            top: -40px;
+            /* Alinea con el top del card padding */
+            left: -40px;
+            /* Alinea con el left del card padding */
+            right: -40px;
+            height: 6px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+            border-radius: 12px 12px 0 0;
+        }
+
+        .main-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            line-height: 1;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .sub-title {
+            text-align: center;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .sub-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 25%;
+            width: 50%;
+            height: 2px;
+            background: var(--secondary);
+            opacity: 0.5;
         }
 
         .logo-web {
@@ -54,8 +118,8 @@
 
         .logo-gif {
             position: absolute;
-            right: 0;
-            height: 60px;
+            left: 0;
+            height: 100px;
             border-radius: 8px;
             cursor: pointer;
             transition: 0.3s;
@@ -83,8 +147,9 @@
         }
 
         .credits-card {
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            border: 2px solid var(--primary);
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-top: 5px solid var(--primary);
             border-radius: 20px;
             padding: 30px;
             max-width: 500px;
@@ -94,14 +159,14 @@
         }
 
         .credits-card h2 {
-            color: var(--primary);
+            color: #000000;
             margin-bottom: 20px;
             font-size: 1.5rem;
-            text-decoration: underline;
+            text-decoration: none;
         }
 
         .credits-card h3 {
-            color: #f1f5f9;
+            color: #000000;
             margin-bottom: 15px;
             font-size: 1.1rem;
         }
@@ -113,12 +178,12 @@
 
         .credits-card li {
             margin: 8px 0;
-            color: #94a3b8;
+            color: #000000;
             font-size: 0.95rem;
         }
 
         .credits-card .author {
-            color: #38bdf8;
+            color: #000000;
             font-weight: bold;
             margin: 15px 0;
             padding: 10px;
@@ -128,8 +193,8 @@
 
         .btn-close-modal {
             margin-top: 25px;
-            background: var(--primary);
-            color: #0f172a;
+            background: var(--secondary);
+            color: #ffffff;
             padding: 10px 25px;
             border-radius: 10px;
             border: none;
@@ -150,22 +215,28 @@
         .top-bar {
             display: flex;
             gap: 15px;
-            margin-bottom: 25px;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 12px;
-            border-radius: 16px;
+            margin-bottom: 30px;
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 8px;
             align-items: center;
         }
 
         .search-input {
             flex: 1;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--glass-border);
-            padding: 10px 18px;
-            border-radius: 12px;
-            color: white;
-            font-size: 0.9rem;
+            background: #ffffff;
+            border: 1px solid var(--field-border);
+            padding: 12px 18px;
+            border-radius: 4px;
+            color: var(--text-dark);
+            font-size: 0.95rem;
             outline: none;
+            transition: 0.2s;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 75, 152, 0.15);
         }
 
         .form-grid {
@@ -186,38 +257,177 @@
 
         .input-group label {
             font-size: 0.85rem;
-            font-weight: 600;
-            color: #38bdf8;
+            font-weight: 700;
+            color: var(--primary);
             display: flex;
             align-items: center;
             gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .styled-input {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--glass-border);
+            background: #ffffff;
+            border: 1px solid var(--field-border);
             padding: 12px;
-            border-radius: 10px;
-            color: white;
+            border-radius: 6px;
+            color: var(--text-dark);
             font-size: 0.95rem;
+            font-family: 'Roboto', sans-serif;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .styled-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 75, 152, 0.15);
+        }
+
+        /* Estilo para los iconos de fecha y hora */
+        .styled-input::-webkit-calendar-picker-indicator {
+            filter: none;
+            cursor: pointer;
         }
 
         .permission-types {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
-            background: rgba(0, 0, 0, 0.1);
-            padding: 15px;
-            border-radius: 16px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
             margin-top: 15px;
+            border: 1px solid #e9ecef;
         }
 
         .check-card {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 0.8rem;
+            gap: 10px;
+            font-size: 0.85rem;
             cursor: pointer;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        /* Estilos para botones de selección de lugar */
+        .dest-type-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .btn-dest {
+            flex: 1;
+            padding: 10px;
+            border-radius: 6px;
+            background: #ffffff;
+            border: 1px solid var(--field-border);
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: 0.3s;
+            font-weight: 600;
+        }
+
+        .btn-dest.active {
+            background: var(--primary);
+            color: #ffffff;
+            border-color: var(--primary);
+        }
+
+        /* Estilos para el campo de Jefe RRHH con icono */
+        .input-with-icon {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .config-icon {
+            cursor: pointer;
+            color: var(--primary);
+            font-size: 1.1rem;
+            opacity: 0.7;
+            transition: 0.3s;
+        }
+
+        .config-icon:hover {
+            opacity: 1;
+            transform: rotate(45deg);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Tarjeta de Información (DNI no encontrado) */
+        #search-error-card {
+            background: var(--primary);
+            border: 1px solid var(--secondary);
+            border-left: 8px solid #00d2ff;
+            color: #ffffff;
+            padding: 15px 25px;
+            border-radius: 12px;
+            margin: 15px auto;
+            max-width: 600px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            animation: slideIn 0.3s ease-out;
+            box-shadow: 0 4px 15px rgba(0, 75, 152, 0.3);
+        }
+
+        #search-error-card i {
+            font-size: 2rem;
+            color: #ffffff;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Soporte para cambio de orientación en impresión */
+        @media print {
+            body.print-mode-full {
+                display: block;
+            }
+
+            body.print-mode-full #print-wrapper {
+                flex-direction: column;
+                display: block;
+            }
+
+            body.print-mode-full .slip {
+                width: 100% !important;
+                min-height: 27cm !important;
+                font-size: 14pt !important;
+                border: none !important;
+            }
+
+            body.print-mode-full #copy-cargo {
+                display: none !important;
+            }
+
+            body.print-mode-full .p-title {
+                font-size: 24pt !important;
+            }
+
+            body.print-mode-full .p-logo {
+                height: 100px !important;
+            }
+
+            body.print-mode-full .p-footer {
+                font-size: 10pt !important;
+                margin-top: 30px;
+            }
         }
 
         .btn-container {
@@ -228,39 +438,50 @@
         }
 
         .btn {
-            padding: 14px 28px;
-            border-radius: 12px;
-            font-weight: 700;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 600;
             cursor: pointer;
             border: none;
             display: flex;
             align-items: center;
-            gap: 8px;
-            transition: 0.3s;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.2s ease;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .btn-load {
-            background: #475569;
+            background: #6c757d;
             color: white;
         }
 
         .btn-save {
-            background: linear-gradient(135deg, #10b981, #059669);
+            background: #00aae4;
             color: white;
         }
 
         .btn-backup {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
+            background: #007bff;
             color: white;
         }
 
         .btn-print {
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-exit {
+            background: #dc3545;
             color: white;
         }
 
         .btn:hover {
-            transform: translateY(-2px);
+            filter: brightness(1.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-1px);
         }
 
         /* --- PRINT STYLES (ARIAL 12, LANDSCAPE, ROUNDED BOXES) --- */
@@ -291,7 +512,8 @@
                 gap: 15px;
                 color: black;
                 font-family: 'Arial', sans-serif;
-                font-size: 12pt;
+                font-size: 10pt;
+                /* Reducido 2 puntos */
                 width: 100%;
             }
 
@@ -300,7 +522,7 @@
                 border: 1px solid #777;
                 padding: 15px;
                 position: relative;
-                min-height: 19.5cm;
+                min-height: 19.0cm;
                 display: flex;
                 flex-direction: column;
             }
@@ -310,7 +532,7 @@
                 align-items: center;
                 border-bottom: 2pt solid black;
                 padding-bottom: 10px;
-                margin-bottom: 15px;
+                margin-bottom: 10px;
             }
 
             .p-logo {
@@ -324,33 +546,27 @@
             }
 
             .p-title {
-                font-family: 'Outfit', sans-serif;
-                font-size: 16pt;
+                font-family: 'Montserrat', sans-serif;
+                font-size: 14pt;
+                /* Reducido 2 puntos */
                 font-weight: bold;
                 margin: 0;
             }
 
-            .p-copy-label {
-                position: absolute;
-                top: 10px;
-                right: 15px;
-                font-weight: bold;
-                font-size: 11pt;
-                text-decoration: underline;
-                color: #444;
-            }
 
             .p-body {
-                line-height: 1.6;
-                margin-bottom: 15px;
+                line-height: 1.1;
+                /* Reducido interlineado */
+                margin-bottom: 6px;
             }
 
             .p-check-grid {
                 display: grid;
                 grid-template-columns: repeat(3, 1fr);
-                gap: 3px;
-                font-size: 9pt;
-                margin-bottom: 8px;
+                gap: 2px;
+                font-size: 7pt;
+                /* Reducido 2 puntos respecto al original de 9pt */
+                margin-bottom: 4px;
             }
 
             .box {
@@ -375,9 +591,10 @@
             .p-time-cell {
                 border: 1.2pt solid black;
                 border-radius: 10px;
-                padding: 6px 10px;
+                padding: 4px 8px;
                 background: #fafafa;
-                font-size: 11pt;
+                font-size: 9pt;
+                /* Reducido 2 puntos */
             }
 
             .p-time-cell b {
@@ -387,8 +604,8 @@
             .p-full-field {
                 border: 1.5pt solid black;
                 border-radius: 12px;
-                padding: 8px 12px;
-                margin-top: 10px;
+                padding: 6px 12px;
+                margin-top: 5px;
             }
 
             /* FIRMAS CON BASTANTE ESPACIO */
@@ -396,21 +613,34 @@
                 display: flex;
                 justify-content: space-between;
                 margin-top: auto;
-                padding-top: 50px;
+                padding-top: 30px;
                 text-align: center;
-                font-size: 9pt;
-                padding-bottom: 10px;
+                font-size: 7pt;
+                /* Reducido 2 puntos */
+                padding-bottom: 8px;
             }
 
             .p-sign-box {
-                width: 31%;
-                border-top: 1pt solid black;
-                padding-top: 5px;
+                width: 32%;
+                text-align: center;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .p-sign-square {
+                width: 90%;
+                height: 75px;
+                border: 1.2pt solid black;
+                border-radius: 10px;
+                margin-bottom: 5px;
+                background: #fff;
             }
 
             /* NOTAS AL PIE ARIAL 8 UNA DEBAJO DE OTRA */
             .p-footer {
-                font-size: 7.5pt;
+                font-size: 5.5pt;
+                /* Reducido 2 puntos */
                 margin-top: 10px;
                 line-height: 1.3;
                 border-top: 1pt solid #aaa;
@@ -430,27 +660,45 @@
 
     <div class="dashboard-card no-print">
         <div class="dashboard-header">
-            <img src="logo_essalud.png" alt="EsSalud Logo" class="logo-web">
-            <h1 class="main-title">Papeleta Digital</h1>
+            <div class="header-stripe"></div>
+            <div style="text-align: center;">
+                <h1 class="main-title">Papeleta Digital</h1>
+                <p
+                    style="font-weight: 700; color: var(--secondary); margin-top: 5px; font-size: 1rem; letter-spacing: 3px;">
+                    RED ASISTENCIAL LA LIBERTAD</p>
+            </div>
             <img src="LogoEsSalud.GIF" alt="EsSalud GIF" class="logo-gif" onclick="toggleCredits(true)">
         </div>
-        <p class="sub-title">Gestión de Permisos • Red Interna Essalud</p>
 
         <div class="top-bar">
             <i class="fas fa-search" style="color: var(--primary)"></i>
-            <input type="text" id="busqueda-dni" class="search-input"
+            <input type="text" id="busqueda-dni" class="search-input" maxlength="8"
                 placeholder="Ingresar DNI para cargar datos anteriores...">
-            <button class="btn btn-load" onclick="cargarDatos()"><i class="fas fa-folder-open"></i> Cargar</button>
+            <button class="btn btn-load" onclick="cargarDatos(event)"><i class="fas fa-folder-open"></i> Cargar</button>
+        </div>
+
+        <div id="search-error-card" class="hidden">
+            <i class="fas fa-exclamation-circle"></i>
+            <div>
+                <strong style="display: block; font-size: 1rem;">No se encontró nada</strong>
+                <span style="font-size: 0.85rem; opacity: 0.9;">No se encontró ninguna Papeleta registrada con el DNI
+                    ingresado. Se han limpiado los campos para un nuevo registro.</span>
+            </div>
         </div>
 
         <div class="form-grid">
             <div class="input-group">
                 <label><i class="fas fa-user-tie"></i> Jefe de RR.HH.</label>
-                <input type="text" id="jefe_rrhh" class="styled-input" value="JUAN CARLOS RAMIREZ GRAU">
+                <div class="input-with-icon">
+                    <select id="jefe_rrhh" class="styled-input" style="flex: 1;"
+                        onchange="verificarJefeOtro()"></select>
+                    <i class="fas fa-cog config-icon" onclick="modalJefes(true)" title="Gestionar Jefes"></i>
+                </div>
             </div>
             <div class="input-group">
                 <label><i class="fas fa-hashtag"></i> Anexo Nº</label>
-                <input type="text" id="anexo_no" class="styled-input" value="07">
+                <input type="text" id="anexo_no" class="styled-input" value="07" readonly
+                    style="opacity: 0.7; cursor: not-allowed;">
             </div>
             <div class="input-group full-width">
                 <label><i class="fas fa-user"></i> Nombre del Trabajador</label>
@@ -480,7 +728,7 @@
                     <label class="check-card"><input type="checkbox" id="chk10"> Capac. No Oficial</label>
                     <label class="check-card"><input type="checkbox" id="chk11"> Vacaciones</label>
                     <label class="check-card"><input type="checkbox" id="chk12"> Sufragio</label>
-                    <label class="check-card"><input type="checkbox" id="chk13"> Descanso Técnico</label>
+                    <label class="check-card"><input type="checkbox" id="chk13"> Descanso Tec. Med</label>
                     <label class="check-card"><input type="checkbox" id="chk14"> Lic. Paternidad</label>
                     <label class="check-card"><input type="checkbox" id="chk15"> Comité</label>
                 </div>
@@ -512,20 +760,115 @@
             </div>
             <div class="input-group full-width">
                 <label><i class="fas fa-location-dot"></i> Lugar al que se dirige</label>
-                <input type="text" id="lugar_dirigido" class="styled-input">
+
+                <div class="dest-type-selector">
+                    <button type="button" class="btn-dest active" id="btn-rall"
+                        onclick="setDestType('rall')">Establecimientos de la RALL</button>
+                    <button type="button" class="btn-dest" id="btn-externo"
+                        onclick="setDestType('externo')">Externo</button>
+                </div>
+
+                <select id="lugar_dirigido_select" class="styled-input">
+                    <option value="" style="background: #ffffff; color: #000000;">-- Seleccione Establecimiento RALL --
+                    </option>
+                    <option value="GERENCIA" style="background: #ffffff; color: #000000;">GERENCIA</option>
+                    <option value="HOSPITAL NACIONAL VIRGEN DE LA PUERTA" style="background: #ffffff; color: #000000;">
+                        HOSPITAL NACIONAL
+                        VIRGEN DE LA PUERTA</option>
+                    <option value="HOSPITAL VICTOR LAZARTE" style="background: #ffffff; color: #000000;">HOSPITAL VICTOR
+                        LAZARTE
+                    </option>
+                    <option value="HOSPITAL II CHOCOPE" style="background: #ffffff; color: #000000;">HOSPITAL II CHOCOPE
+                    </option>
+                    <option value="HOSPITAL I ALBRECHT" style="background: #ffffff; color: #000000;">HOSPITAL I ALBRECHT
+                    </option>
+                    <option value="HOSPITAL I PACASMAYO" style="background: #ffffff; color: #000000;">HOSPITAL I
+                        PACASMAYO</option>
+                    <option value="HOSPITAL I FLORENCIA DE MORA" style="background: #ffffff; color: #000000;">HOSPITAL I
+                        FLORENCIA DE
+                        MORA</option>
+                    <option value="HOSPITAL I LA ESPERANZA" style="background: #ffffff; color: #000000;">HOSPITAL I LA
+                        ESPERANZA
+                    </option>
+                    <option value="HOSPITAL I MOCHE" style="background: #ffffff; color: #000000;">HOSPITAL I MOCHE
+                    </option>
+                    <option value="HOSPITAL I VIRU" style="background: #ffffff; color: #000000;">HOSPITAL I VIRU
+                    </option>
+                    <option value="HOSPITAL I CHAO" style="background: #ffffff; color: #000000;">HOSPITAL I CHAO
+                    </option>
+                    <option value="CME CASA GRANDE" style="background: #ffffff; color: #000000;">CME CASA GRANDE
+                    </option>
+                    <option value="CM ASCOPE" style="background: #ffffff; color: #000000;">CM ASCOPE</option>
+                    <option value="POLICLINICO EL PORVENIR" style="background: #ffffff; color: #000000;">POLICLINICO EL
+                        PORVENIR
+                    </option>
+                    <option value="POLICLINICO LARCO" style="background: #ffffff; color: #000000;">POLICLINICO LARCO
+                    </option>
+                    <option value="CAP. III METROPOLITANO" style="background: #ffffff; color: #000000;">CAP. III
+                        METROPOLITANO</option>
+                    <option value="CAP. II GUADALUPE" style="background: #ffffff; color: #000000;">CAP. II GUADALUPE
+                    </option>
+                    <option value="CAP. II HUAMACHUCO" style="background: #ffffff; color: #000000;">CAP. II HUAMACHUCO
+                    </option>
+                    <option value="CAP. II LAREDO" style="background: #ffffff; color: #000000;">CAP. II LAREDO</option>
+                    <option value="CAP. II OTUZCO" style="background: #ffffff; color: #000000;">CAP. II OTUZCO</option>
+                    <option value="CAP. I CASCAS" style="background: #ffffff; color: #000000;">CAP. I CASCAS</option>
+                    <option value="CAP. I CHICAMA" style="background: #ffffff; color: #000000;">CAP. I CHICAMA</option>
+                    <option value="CAP. I MALABRIGO" style="background: #ffffff; color: #000000;">CAP. I MALABRIGO
+                    </option>
+                    <option value="CAP. I SALAVERRY" style="background: #ffffff; color: #000000;">CAP. I SALAVERRY
+                    </option>
+                    <option value="CAP. I SAN PEDRO" style="background: #ffffff; color: #000000;">CAP. I SAN PEDRO
+                    </option>
+                    <option value="CAP. I SOLEDAD" style="background: #ffffff; color: #000000;">CAP. I SOLEDAD</option>
+                    <option value="CAP. I TAYABAMBA" style="background: #ffffff; color: #000000;">CAP. I TAYABAMBA
+                    </option>
+                    <option value="PM CARTAVIO" style="background: #ffffff; color: #000000;">PM CARTAVIO</option>
+                    <option value="PM JEQUETEPEQUE" style="background: #ffffff; color: #000000;">PM JEQUETEPEQUE
+                    </option>
+                    <option value="PM LIMONCARRO" style="background: #ffffff; color: #000000;">PM LIMONCARRO</option>
+                    <option value="PM QUIRUVILCA" style="background: #ffffff; color: #000000;">PM QUIRUVILCA</option>
+                    <option value="PM SAN JOSE" style="background: #ffffff; color: #000000;">PM SAN JOSE</option>
+                    <option value="PM STGO DE CHUCO" style="background: #ffffff; color: #000000;">PM STGO DE CHUCO
+                    </option>
+                    <option value="PM SAUSAL" style="background: #ffffff; color: #000000;">PM SAUSAL</option>
+                    <option value="PM PAIJAN" style="background: #ffffff; color: #000000;">PM PAIJAN</option>
+                    <option value="PM SANTIAGO DE CAO" style="background: #ffffff; color: #000000;">PM SANTIAGO DE CAO
+                    </option>
+                    <option value="CM HUANCHACO" style="background: #ffffff; color: #000000;">CM HUANCHACO</option>
+                    <option value="ALMACEN CENTRAL (Urb los Jardines)" style="background: #ffffff; color: #000000;">
+                        ALMACEN CENTRAL (Urb
+                        los Jardines)</option>
+                    <option value="OTRO" style="background: #ffffff; color: #004b98; font-weight: bold;">-- OTRO
+                        (REGISTRAR) --</option>
+                </select>
+
+                <div id="wrapper-otro-establecimiento" class="hidden"
+                    style="margin-top: 10px; display: flex; gap: 8px;">
+                    <input type="text" id="input-otro-establecimiento" class="styled-input" style="flex: 1;"
+                        placeholder="Escriba el nuevo establecimiento...">
+                    <button type="button" class="btn btn-save" style="padding: 10px 15px; font-size: 0.8rem;"
+                        onclick="agregarEstablecimientoNuevo()">
+                        <i class="fas fa-plus"></i> AGREGAR
+                    </button>
+                </div>
+
+                <input type="text" id="lugar_dirigido_externo" class="styled-input hidden"
+                    placeholder="Ingrese el lugar de destino externo...">
             </div>
             <div class="input-group full-width">
-                <label><i class="fas fa-comment-dots"></i> MotivoDetallado</label>
+                <label><i class="fas fa-comment-dots"></i> Motivo Detallado</label>
                 <textarea id="motivo_permiso" class="styled-input" rows="2"></textarea>
             </div>
         </div>
 
         <div class="btn-container">
-            <button class="btn btn-save" onclick="guardarDatos()"><i class="fas fa-save"></i> Guardar Todo</button>
-            <button class="btn btn-backup" onclick="descargarCopia()"><i class="fas fa-download"></i> Descargar
-                Copia</button>
-            <button class="btn btn-print" onclick="prepararEImprimir()"><i class="fas fa-file-pdf"></i>
-                Imprimir</button>
+            <button class="btn btn-save" onclick="guardarDatos()"><i class="fas fa-save"></i> GUARDAR</button>
+            <button class="btn btn-backup" onclick="prepararEImprimir(false)"
+                title="Dos copias en una hoja horizontal"><i class="fas fa-file-pdf"></i> PDF (2 Copias)</button>
+            <button class="btn btn-backup" style="background: linear-gradient(135deg, #6366f1, #4338ca);"
+                onclick="prepararEImprimir(true)" title="Una sola papeleta en toda la hoja A4"><i
+                    class="fas fa-file-invoice"></i> PDF (A4 Completo)</button>
             <button class="btn btn-exit" onclick="confirmarSalida()"><i class="fas fa-power-off"></i> Salir</button>
         </div>
     </div>
@@ -535,6 +878,79 @@
     <div id="print-wrapper">
         <div id="copy-original" class="slip"></div>
         <div id="copy-cargo" class="slip"></div>
+    </div>
+
+    <!-- MODAL PARA NUEVO JEFE (OTRO) -->
+    <div id="modal-nuevo-jefe" class="modal-credits">
+        <div class="credits-card" style="max-width: 500px;">
+            <h2 style="text-decoration: none; border-bottom: 2px solid var(--primary); padding-bottom: 10px;">Nuevo Jefe
+                RR.HH.</h2>
+            <div class="form-grid" style="text-align: left; grid-template-columns: 1fr; margin-top: 20px;">
+                <div class="input-group">
+                    <label style="color: var(--primary);">Nombres y Apellidos</label>
+                    <input type="text" id="new-jefe-nombres" class="styled-input" placeholder="Nombre completo">
+                </div>
+                <div class="input-group">
+                    <label style="color: var(--primary);">Cargo</label>
+                    <input type="text" id="new-jefe-cargo" class="styled-input" placeholder="Cargo">
+                </div>
+                <div class="input-group">
+                    <label style="color: var(--primary);">Sede</label>
+                    <select id="new-jefe-sede" class="styled-input">
+                        <option value="">-- Seleccione Sede --</option>
+                        <option value="GERENCIA">GERENCIA</option>
+                        <option value="HOSPITAL NACIONAL VIRGEN DE LA PUERTA">HOSPITAL NACIONAL VIRGEN DE LA PUERTA
+                        </option>
+                        <option value="HOSPITAL VICTOR LAZARTE">HOSPITAL VICTOR LAZARTE</option>
+                        <option value="HOSPITAL II CHOCOPE">HOSPITAL II CHOCOPE</option>
+                        <option value="HOSPITAL I ALBRECHT">HOSPITAL I ALBRECHT</option>
+                        <option value="HOSPITAL I PACASMAYO">HOSPITAL I PACASMAYO</option>
+                        <option value="HOSPITAL I FLORENCIA DE MORA">HOSPITAL I FLORENCIA DE MORA</option>
+                        <option value="HOSPITAL I LA ESPERANZA">HOSPITAL I LA ESPERANZA</option>
+                        <option value="HOSPITAL I MOCHE">HOSPITAL I MOCHE</option>
+                        <option value="HOSPITAL I VIRU">HOSPITAL I VIRU</option>
+                        <option value="HOSPITAL I CHAO">HOSPITAL I CHAO</option>
+                        <option value="CME CASA GRANDE">CME CASA GRANDE</option>
+                        <option value="CM ASCOPE">CM ASCOPE</option>
+                        <option value="POLICLINICO EL PORVENIR">POLICLINICO EL PORVENIR</option>
+                        <option value="POLICLINICO LARCO">POLICLINICO LARCO</option>
+                        <option value="CAP. III METROPOLITANO">CAP. III METROPOLITANO</option>
+                        <option value="CAP. II GUADALUPE">CAP. II GUADALUPE</option>
+                        <option value="CAP. II HUAMACHUCO">CAP. II HUAMACHUCO</option>
+                        <option value="CAP. II LAREDO">CAP. II LAREDO</option>
+                        <option value="CAP. II OTUZCO">CAP. II OTUZCO</option>
+                        <option value="CAP. I CASCAS">CAP. I CASCAS</option>
+                        <option value="CAP. I CHICAMA">CAP. I CHICAMA</option>
+                        <option value="CAP. I MALABRIGO">CAP. I MALABRIGO</option>
+                        <option value="CAP. I SALAVERRY">CAP. I SALAVERRY</option>
+                        <option value="CAP. I SAN PEDRO">CAP. I SAN PEDRO</option>
+                        <option value="CAP. I SOLEDAD">CAP. I SOLEDAD</option>
+                        <option value="CAP. I TAYABAMBA">CAP. I TAYABAMBA</option>
+                        <option value="PM CARTAVIO">PM CARTAVIO</option>
+                        <option value="PM JEQUETEPEQUE">PM JEQUETEPEQUE</option>
+                        <option value="PM LIMONCARRO">PM LIMONCARRO</option>
+                        <option value="PM QUIRUVILCA">PM QUIRUVILCA</option>
+                        <option value="PM SAN JOSE">PM SAN JOSE</option>
+                        <option value="PM STGO DE CHUCO">PM STGO DE CHUCO</option>
+                        <option value="PM SAUSAL">PM SAUSAL</option>
+                        <option value="PM PAIJAN">PM PAIJAN</option>
+                        <option value="PM SANTIAGO DE CAO">PM SANTIAGO DE CAO</option>
+                        <option value="CM HUANCHACO">CM HUANCHACO</option>
+                        <option value="ALMACEN CENTRAL (Urb los Jardines)">ALMACEN CENTRAL (Urb los Jardines)</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label style="color: var(--primary);">Red</label>
+                    <input type="text" id="new-jefe-red" class="styled-input" placeholder="Red Asistencial">
+                </div>
+            </div>
+            <div style="margin-top: 25px; display: flex; gap: 15px;">
+                <button class="btn btn-save" style="flex: 1; justify-content: center;"
+                    onclick="registrarNuevoJefeDirecto()"><i class="fas fa-check"></i> Registrar</button>
+                <button class="btn btn-exit" style="flex: 1; justify-content: center; background: #64748b;"
+                    onclick="cerrarModalNuevoJefe()"><i class="fas fa-times"></i> Cancelar</button>
+            </div>
+        </div>
     </div>
 
     <!-- MODAL DE CRÉDITOS -->
@@ -555,15 +971,397 @@
         </div>
     </div>
 
+    <!-- MODAL DE GESTIÓN DE JEFES -->
+    <div id="modal-jefes" class="modal-credits">
+        <div class="credits-card" style="max-width: 1000px; width: 95%;">
+            <h2>Gestión de Jefes/ Encargados de RR.HH.</h2>
+            <div id="jefes-auth-section">
+                <p style="margin-bottom: 15px; font-size: 0.9rem;">Ingrese la clave dinámica:</p>
+                <input type="password" id="key-rrhh" class="styled-input"
+                    style="width: 100%; margin-bottom: 20px; text-align: center;" placeholder="********">
+                <button class="btn btn-save" style="width: 100%;" onclick="validarAccesoJefes()">Validar Acceso</button>
+            </div>
+            <div id="jefes-edit-section" class="hidden">
+                <div style="max-height: 400px; overflow-y: auto; margin-bottom: 20px;">
+                    <table style="width: 100%; border-collapse: collapse; color: var(--text-dark); font-size: 0.85rem;">
+                        <thead>
+                            <tr style="border-bottom: 1px solid var(--primary);">
+                                <th style="padding: 10px; text-align: left;">Nombres y Apellidos</th>
+                                <th style="padding: 10px; text-align: left;">Cargo</th>
+                                <th style="padding: 10px; text-align: left;">Sede</th>
+                                <th style="padding: 10px; text-align: left;">Red</th>
+                                <th style="padding: 10px; text-align: center;">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="jefes-table-body">
+                            <!-- JS will populate this -->
+                        </tbody>
+                    </table>
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 15px;">
+                    <button class="btn btn-load" style="padding: 8px 16px; font-size: 0.8rem;"
+                        onclick="agregarFilaJefe()"><i class="fas fa-plus"></i> Añadir Nuevo Jefe</button>
+                    <button class="btn btn-save" style="padding: 8px 16px; font-size: 0.8rem;"
+                        onclick="guardarListaJefes()"><i class="fas fa-save"></i> Guardar Todos los Cambios</button>
+                </div>
+            </div>
+            <button class="btn-close-modal" onclick="modalJefes(false)"
+                style="margin-top: 10px; background: var(--secondary); color: white;">CANCELAR</button>
+        </div>
+    </div>
+
     <script>
-        const API_URL = 'http://' + window.location.hostname + ':4000/api';
-        document.getElementById('fecha_solicitud').valueAsDate = new Date();
+        const API_URL = 'http://' + window.location.hostname + `:4000/api`;
+        let jefesData = []; // Global para guardar los objetos de jefes
+        // Forzar fecha local correcta al iniciar (evita salto de día por UTC)
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        document.getElementById('fecha_solicitud').value = `${year}-${month}-${day}`;
+
+        const establecimientosRall = [
+            "GERENCIA",
+            "HOSPITAL NACIONAL VIRGEN DE LA PUERTA", "HOSPITAL VICTOR LAZARTE",
+            "HOSPITAL II CHOCOPE", "HOSPITAL I ALBRECHT", "HOSPITAL I PACASMAYO",
+            "HOSPITAL I FLORENCIA DE MORA", "HOSPITAL I LA ESPERANZA",
+            "HOSPITAL I MOCHE", "HOSPITAL I VIRU", "HOSPITAL I CHAO",
+            "CME CASA GRANDE", "CM ASCOPE", "POLICLINICO EL PORVENIR",
+            "POLICLINICO LARCO", "CAP. III METROPOLITANO", "CAP. II GUADALUPE",
+            "CAP. II HUAMACHUCO", "CAP. II LAREDO", "CAP. II OTUZCO",
+            "CAP. I CASCAS", "CAP. I CHICAMA", "CAP. I MALABRIGO",
+            "CAP. I SALAVERRY", "CAP. I SAN PEDRO", "CAP. I SOLEDAD",
+            "CAP. I TAYABAMBA", "PM CARTAVIO", "PM JEQUETEPEQUE",
+            "PM LIMONCARRO", "PM QUIRUVILCA", "PM SAN JOSE",
+            "PM STGO DE CHUCO", "PM SAUSAL", "PM PAIJAN",
+            "PM SANTIAGO DE CAO", "CM HUANCHACO", "ALMACEN CENTRAL (Urb los Jardines)"
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            cargarListaJefes();
+            setupCalculoTiempo();
+            setupBloqueoFechas();
+
+            // Ocultar tarjeta de error al hacer clic en cualquier parte
+            document.addEventListener('click', (e) => {
+                const errorCard = document.getElementById('search-error-card');
+                if (!errorCard.classList.contains('hidden')) {
+                    errorCard.classList.add('hidden');
+                }
+            });
+        });
+
+        function setupBloqueoFechas() {
+            const inputEmision = document.getElementById('fecha_solicitud');
+            const inputSalida = document.getElementById('fecha_salida');
+
+            const actualizarMinSalida = () => {
+                inputSalida.min = inputEmision.value;
+            };
+
+            // Escuchar cambios en fecha de emisión para actualizar el límite
+            inputEmision.addEventListener('change', actualizarMinSalida);
+
+            // Establecer el límite inicial
+            actualizarMinSalida();
+        }
+
+        function setupCalculoTiempo() {
+            const inputs = ['fecha_salida', 'hora_salida', 'fecha_retorno', 'hora_retorno'];
+            inputs.forEach(id => {
+                document.getElementById(id).addEventListener('change', calcularDiferenciaTiempo);
+            });
+        }
+
+        function calcularDiferenciaTiempo() {
+            const fs = document.getElementById('fecha_salida').value;
+            const hs = document.getElementById('hora_salida').value;
+            const fr = document.getElementById('fecha_retorno').value;
+            const hr = document.getElementById('hora_retorno').value;
+
+            if (fs && hs && fr && hr) {
+                const salida = new Date(`${fs}T${hs}`);
+                const retorno = new Date(`${fr}T${hr}`);
+
+                if (retorno > salida) {
+                    const diffMs = retorno - salida;
+                    const diffMin = Math.floor(diffMs / (1000 * 60));
+
+                    const dias = Math.floor(diffMin / (60 * 24));
+                    const horas = Math.floor((diffMin % (60 * 24)) / 60);
+                    const minutos = diffMin % 60;
+
+                    let resultado = [];
+                    if (dias > 0) resultado.push(`${dias} día(s)`);
+                    if (horas > 0) resultado.push(`${horas} hora(s)`);
+                    if (minutos > 0) resultado.push(`${minutos} minuto(s)`);
+
+                    document.getElementById('total_tiempo').value = resultado.join(', ');
+                } else if (fr && hr) {
+                    document.getElementById('total_tiempo').value = "Error: Retorno antes que salida";
+                }
+            }
+        }
+
+        function validarFechas() {
+            const fs = document.getElementById('fecha_salida').value;
+            const fe = document.getElementById('fecha_solicitud').value;
+
+            if (fs && fe) {
+                // Comparar solo fechas (YYYY-MM-DD)
+                if (fs < fe) {
+                    alert("⚠️ La Fecha de Salida no puede ser anterior a la Fecha de Emisión.");
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        async function cargarListaJefes() {
+            try {
+                const res = await fetch(`${API_URL}/jefes`);
+                jefesData = await res.json();
+
+                const select = document.getElementById('jefe_rrhh');
+                const currentValue = select.value;
+                select.innerHTML = '';
+
+                // Opción por defecto (Placeholder)
+                const optDef = document.createElement('option');
+                optDef.value = "";
+                optDef.textContent = "-- Seleccione Jefe / Encargado de RR.HH. --";
+                optDef.disabled = true;
+                optDef.selected = true;
+                optDef.style.background = "#ffffff";
+                optDef.style.color = "#004b98";
+                select.appendChild(optDef);
+
+                jefesData.forEach((j, index) => {
+                    const opt = document.createElement('option');
+                    opt.value = index; // Usamos el índice para recuperar el objeto completo
+                    opt.textContent = `${j.nombres} ${j.sede ? ' - ' + j.sede : ''}`;
+                    opt.style.background = "#ffffff";
+                    opt.style.color = "#000000";
+                    select.appendChild(opt);
+                });
+
+                // Añadir opción "Otro" al final
+                const optOtro = document.createElement('option');
+                optOtro.value = "otro";
+                optOtro.textContent = "Otro";
+                optOtro.style.background = "#ffffff";
+                optOtro.style.color = "#000000";
+                select.appendChild(optOtro);
+
+                if (currentValue !== "" && currentValue !== "otro" && jefesData[currentValue]) {
+                    select.value = currentValue;
+                }
+            } catch (e) { console.error("Error al cargar jefes"); }
+        }
+
+        function verificarJefeOtro() {
+            const select = document.getElementById('jefe_rrhh');
+            if (select.value === 'otro') {
+                document.getElementById('modal-nuevo-jefe').style.display = 'flex';
+                // Valores por defecto para ahorrar tiempo
+                document.getElementById('new-jefe-nombres').value = '';
+                document.getElementById('new-jefe-cargo').value = 'Jefe de la Oficina de RR.HH.';
+                document.getElementById('new-jefe-sede').value = '';
+                document.getElementById('new-jefe-red').value = 'Red Asistencial La libertad';
+                document.getElementById('new-jefe-nombres').focus();
+            }
+        }
+
+        function cerrarModalNuevoJefe() {
+            document.getElementById('modal-nuevo-jefe').style.display = 'none';
+            document.getElementById('jefe_rrhh').value = ""; // Regresar a selección vacía
+        }
+
+        async function registrarNuevoJefeDirecto() {
+            const nombres = document.getElementById('new-jefe-nombres').value.trim();
+            const cargo = document.getElementById('new-jefe-cargo').value.trim();
+            const sede = document.getElementById('new-jefe-sede').value.trim();
+            const red = document.getElementById('new-jefe-red').value.trim();
+
+            if (!nombres || !cargo || !sede || !red) {
+                alert("❌ Por favor complete todos los campos obligatorios.");
+                return;
+            }
+
+            try {
+                // 1. Obtener lista actual del servidor
+                const resList = await fetch(`${API_URL}/jefes`);
+                let jefes = await resList.json();
+
+                // 2. Evitar duplicados exactos
+                if (jefes.some(j => j.nombres.toLowerCase() === nombres.toLowerCase())) {
+                    alert("⚠️ Este jefe ya se encuentra registrado.");
+                    const idx = jefes.findIndex(j => j.nombres.toLowerCase() === nombres.toLowerCase());
+                    document.getElementById('jefe_rrhh').value = idx;
+                    document.getElementById('modal-nuevo-jefe').style.display = 'none';
+                    return;
+                }
+
+                // 3. Añadir nuevo registro
+                jefes.push({ nombres, cargo, sede, red });
+
+                // 4. Clave dinámica del día
+                const now = new Date();
+                const dd = String(now.getDate()).padStart(2, '0');
+                const mm = String(now.getMonth() + 1).padStart(2, '0');
+                const key = `02855470${dd}${mm}`;
+
+                // 5. Persistir en el servidor
+                const resSave = await fetch(`${API_URL}/jefes`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password: key, jefes: jefes })
+                });
+
+                if (resSave.ok) {
+                    await cargarListaJefes(); // Recargar el global y el select
+                    // Buscar el índice del recién creado
+                    const nuevoIndex = jefesData.findIndex(j => j.nombres === nombres);
+                    document.getElementById('jefe_rrhh').value = nuevoIndex;
+                    document.getElementById('modal-nuevo-jefe').style.display = 'none';
+                    alert("✅ Jefe registrado correctamente.");
+                } else {
+                    const err = await resSave.json();
+                    alert("❌ Error: " + err.error);
+                }
+            } catch (e) {
+                alert("❌ Error de comunicación con el servidor.");
+            }
+        }
+
+        function modalJefes(show) {
+            document.getElementById('modal-jefes').style.display = show ? 'flex' : 'none';
+            if (show) {
+                document.getElementById('jefes-auth-section').classList.remove('hidden');
+                document.getElementById('jefes-edit-section').classList.add('hidden');
+                document.getElementById('key-rrhh').value = '';
+            }
+        }
+
+        function validarAccesoJefes() {
+            const key = document.getElementById('key-rrhh').value;
+            const now = new Date();
+            const dd = String(now.getDate()).padStart(2, '0');
+            const mm = String(now.getMonth() + 1).padStart(2, '0');
+            const expectedKey = `02855470${dd}${mm}`;
+
+            if (key === expectedKey) {
+                document.getElementById('jefes-auth-section').classList.add('hidden');
+                document.getElementById('jefes-edit-section').classList.remove('hidden');
+                renderJefesTable();
+            } else {
+                alert("❌ Clave dinámica incorrecta");
+            }
+        }
+
+        function renderJefesTable() {
+            const tbody = document.getElementById('jefes-table-body');
+            tbody.innerHTML = '';
+            jefesData.forEach((j, index) => {
+                const tr = document.createElement('tr');
+
+                // Generar opciones de Sede
+                let sedeOptions = establecimientosRall.map(s =>
+                    `<option value="${s}" ${j.sede === s ? 'selected' : ''}>${s}</option>`
+                ).join('');
+
+                tr.innerHTML = `
+                    <td style="padding: 5px;"><input type="text" class="styled-input jefe-nombres" value="${j.nombres}" style="width: 100%; font-size: 0.8rem;"></td>
+                    <td style="padding: 5px;"><input type="text" class="styled-input jefe-cargo" value="${j.cargo}" style="width: 100%; font-size: 0.8rem;"></td>
+                    <td style="padding: 5px;">
+                        <select class="styled-input jefe-sede" style="width: 100%; font-size: 0.8rem;">
+                            <option value="">-- Seleccione Sede --</option>
+                            ${sedeOptions}
+                        </select>
+                    </td>
+                    <td style="padding: 5px;"><input type="text" class="styled-input jefe-red" value="${j.red}" style="width: 100%; font-size: 0.8rem;"></td>
+                    <td style="padding: 5px; text-align: center;"><button class="btn btn-exit" onclick="eliminarFilaJefe(this)" style="padding: 5px 10px; font-size: 0.7rem;"><i class="fas fa-trash"></i></button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function agregarFilaJefe() {
+            const tbody = document.getElementById('jefes-table-body');
+            const tr = document.createElement('tr');
+
+            // Generar opciones de Sede
+            let sedeOptions = establecimientosRall.map(s =>
+                `<option value="${s}">${s}</option>`
+            ).join('');
+
+            tr.innerHTML = `
+                <td style="padding: 5px;"><input type="text" class="styled-input jefe-nombres" placeholder="Nombres" style="width: 100%; font-size: 0.8rem;"></td>
+                <td style="padding: 5px;"><input type="text" class="styled-input jefe-cargo" value="Jefe de la Oficina de RR.HH." style="width: 100%; font-size: 0.8rem;"></td>
+                <td style="padding: 5px;">
+                    <select class="styled-input jefe-sede" style="width: 100%; font-size: 0.8rem;">
+                        <option value="">-- Seleccione Sede --</option>
+                        ${sedeOptions}
+                    </select>
+                </td>
+                <td style="padding: 5px;"><input type="text" class="styled-input jefe-red" value="Red Asistencial La libertad" style="width: 100%; font-size: 0.8rem;"></td>
+                <td style="padding: 5px; text-align: center;"><button class="btn btn-exit" onclick="eliminarFilaJefe(this)" style="padding: 5px 10px; font-size: 0.7rem;"><i class="fas fa-trash"></i></button></td>
+            `;
+            tbody.appendChild(tr);
+        }
+
+        function eliminarFilaJefe(btn) {
+            btn.closest('tr').remove();
+        }
+
+        async function guardarListaJefes() {
+            const lines = [];
+            const rows = document.querySelectorAll('#jefes-table-body tr');
+            rows.forEach(row => {
+                const nombres = row.querySelector('.jefe-nombres').value.trim();
+                const cargo = row.querySelector('.jefe-cargo').value.trim();
+                const sede = row.querySelector('.jefe-sede').value.trim();
+                const red = row.querySelector('.jefe-red').value.trim();
+
+                if (nombres) {
+                    lines.push({ nombres, cargo, sede, red });
+                }
+            });
+
+            const key = document.getElementById('key-rrhh').value;
+
+            try {
+                const res = await fetch(`${API_URL}/jefes`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password: key, jefes: lines })
+                });
+
+                if (res.ok) {
+                    alert("✅ Lista actualizada");
+                    await cargarListaJefes();
+                    modalJefes(false);
+                } else {
+                    const err = await res.json();
+                    alert("❌ Error: " + err.error);
+                }
+            } catch (e) { alert("❌ Error de servidor"); }
+        }
 
         function toggleCredits(show) {
             document.getElementById('modal-credits').style.display = show ? 'flex' : 'none';
         }
 
         async function guardarDatos() {
+            // Validar que se haya seleccionado un jefe (que no sea "otro" sin registrar)
+            const selectJefe = document.getElementById('jefe_rrhh');
+            if (selectJefe.value === 'otro' || selectJefe.value === "") {
+                alert("❌ Por favor elija un Jefe de RR.HH. o registre uno nuevo.");
+                return;
+            }
+
+            if (!validarFechas()) return;
+
             // Intentar obtener el DNI de ambos campos posibles (el de arriba o el de la firma)
             let dni = document.getElementById('trabajador_dni').value.trim();
             if (!dni) dni = document.getElementById('busqueda-dni').value.trim();
@@ -574,10 +1372,15 @@
             }
 
             const datos = {};
-            // Capturar todos los inputs (textos, fechas, horas)
-            document.querySelectorAll('input, textarea').forEach(el => {
+            // Capturar todos los inputs (textos, fechas, horas, selects)
+            document.querySelectorAll('input, textarea, select').forEach(el => {
                 if (el.id) {
                     if (el.type === 'checkbox') datos[el.id] = el.checked;
+                    else if (el.id === 'jefe_rrhh') {
+                        // Guardar el NOMBRE, no el índice
+                        if (el.value === 'otro') datos[el.id] = 'otro';
+                        else datos[el.id] = jefesData[el.value] ? jefesData[el.value].nombres : '';
+                    }
                     else datos[el.id] = el.value;
                 }
             });
@@ -603,48 +1406,204 @@
             }
         }
 
-        function descargarCopia() {
-            const dni = document.getElementById('trabajador_dni').value.trim();
-            if (!dni) { alert("Ingrese el DNI para identificar el archivo."); return; }
+        async function agregarNuevoJefeALista(nombre) {
+            try {
+                // Para simplificar, si es "Otro", lo guardamos como un objeto con cargo/sede default o vacío
+                // El usuario puede luego editarlo con el engranaje
+                const nuevoJefe = {
+                    nombres: nombre,
+                    cargo: "Jefe de la Oficina de RR.HH.",
+                    sede: "",
+                    red: ""
+                };
 
-            const datos = {};
-            document.querySelectorAll('input, textarea').forEach(el => {
-                if (el.id) {
-                    if (el.type === 'checkbox') datos[el.id] = el.checked;
-                    else datos[el.id] = el.value;
+                const resList = await fetch(`${API_URL}/jefes`);
+                let jefes = await resList.json();
+
+                if (jefes.some(j => j.nombres.toLowerCase() === nombre.toLowerCase())) {
+                    const index = jefes.findIndex(j => j.nombres.toLowerCase() === nombre.toLowerCase());
+                    document.getElementById('jefe_rrhh').value = index;
+                    document.getElementById('jefe_rrhh_otro').classList.add('hidden');
+                    return true;
                 }
-            });
 
-            const blob = new Blob([JSON.stringify(datos, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `Papeleta_${dni}.json`;
-            a.click();
-            URL.revokeObjectURL(url);
-        }
+                jefes.push(nuevoJefe);
 
-        function confirmarSalida() {
-            if (confirm("¿Está seguro que desea cerrar el formulario? Se perderán los datos no guardados.")) {
-                location.reload();
+                const now = new Date();
+                const dd = String(now.getDate()).padStart(2, '0');
+                const mm = String(now.getMonth() + 1).padStart(2, '0');
+                const key = `02855470${dd}${mm}`;
+
+                const resSave = await fetch(`${API_URL}/jefes`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password: key, jefes: jefes })
+                });
+
+                if (resSave.ok) {
+                    await cargarListaJefes();
+                    // Buscar el nuevo índice
+                    const nuevoIndex = jefesData.findIndex(j => j.nombres === nombre);
+                    document.getElementById('jefe_rrhh').value = nuevoIndex;
+                    document.getElementById('jefe_rrhh_otro').classList.add('hidden');
+                    document.getElementById('jefe_rrhh_otro').value = '';
+                    return true;
+                } else {
+                    alert("❌ No se pudo agregar el nuevo jefe a la lista permanente.");
+                    return false;
+                }
+            } catch (e) {
+                console.error(e);
+                alert("❌ Error al persistir el nuevo jefe.");
+                return false;
             }
         }
 
-        async function cargarDatos() {
-            const dni = document.getElementById('busqueda-dni').value;
-            const res = await fetch(`${API_URL}/load/${dni}`);
-            if (res.status === 404) { alert("No hallado"); return; }
-            const d = await res.json();
-            document.querySelectorAll('input, textarea').forEach(el => {
-                if (d[el.id] !== undefined) {
-                    if (el.type === 'checkbox') el.checked = d[el.id];
-                    else el.value = d[el.id];
-                }
-            });
-            alert("✓ Cargado");
+
+
+        function confirmarSalida() {
+            if (confirm("¿Está seguro que desea cerrar el formulario? Se perderán los datos no guardados.")) {
+                window.location.href = "http://172.27.56.25:3000/index.html";
+            }
         }
 
-        function prepararEImprimir() {
+        function setDestType(type) {
+            const btnRall = document.getElementById('btn-rall');
+            const btnExterno = document.getElementById('btn-externo');
+            const selectRall = document.getElementById('lugar_dirigido_select');
+            const inputExterno = document.getElementById('lugar_dirigido_externo');
+            const wrapperOtro = document.getElementById('wrapper-otro-establecimiento');
+
+            if (type === 'rall') {
+                btnRall.classList.add('active');
+                btnExterno.classList.remove('active');
+                selectRall.classList.remove('hidden');
+                inputExterno.classList.add('hidden');
+                // Si estaba en 'OTRO' al volver, mostrar el panel
+                if (selectRall.value === 'OTRO') wrapperOtro.classList.remove('hidden');
+            } else {
+                btnRall.classList.remove('active');
+                btnExterno.classList.add('active');
+                selectRall.classList.add('hidden');
+                inputExterno.classList.remove('hidden');
+                wrapperOtro.classList.add('hidden');
+            }
+        }
+
+        // Detectar cuando se selecciona OTRO en la lista de establecimientos
+        document.getElementById('lugar_dirigido_select').addEventListener('change', function () {
+            const wrapper = document.getElementById('wrapper-otro-establecimiento');
+            if (this.value === 'OTRO') {
+                wrapper.classList.remove('hidden');
+                document.getElementById('input-otro-establecimiento').focus();
+            } else {
+                wrapper.classList.add('hidden');
+            }
+        });
+
+        function agregarEstablecimientoNuevo() {
+            const input = document.getElementById('input-otro-establecimiento');
+            const nuevo = input.value.trim().toUpperCase();
+
+            if (!nuevo) {
+                alert("❌ Ingrese el nombre del establecimiento.");
+                return;
+            }
+
+            const select = document.getElementById('lugar_dirigido_select');
+
+            // Verificar si ya existe
+            let existe = false;
+            Array.from(select.options).forEach(opt => {
+                if (opt.value === nuevo) existe = true;
+            });
+
+            if (existe) {
+                alert("⚠️ Este establecimiento ya está en la lista.");
+                select.value = nuevo;
+            } else {
+                // Crear nueva opción antes de la opción 'OTRO'
+                const opt = document.createElement('option');
+                opt.value = nuevo;
+                opt.textContent = nuevo;
+                opt.style.background = "#ffffff";
+                opt.style.color = "#000000";
+
+                // Insertar antes del penúltimo (antes de OTRO)
+                const optOtro = select.options[select.options.length - 1];
+                select.insertBefore(opt, optOtro);
+
+                select.value = nuevo;
+                alert("✅ Establecimiento añadido a la lista temporal.");
+            }
+
+            // Limpiar y ocultar
+            input.value = '';
+            document.getElementById('wrapper-otro-establecimiento').classList.add('hidden');
+        }
+
+        async function cargarDatos(event) {
+            if (event) event.stopPropagation(); // Evitar que el clic llegue al document y cierre la tarjeta de inmediato
+
+            const errorCard = document.getElementById('search-error-card');
+            errorCard.classList.add('hidden'); // Ocultar error anterior
+
+            const dni = document.getElementById('busqueda-dni').value;
+            if (!dni) return;
+
+            try {
+                const res = await fetch(`${API_URL}/load/${dni}`);
+
+                if (res.status === 404) {
+                    errorCard.classList.remove('hidden');
+                    // Limpiar todos los campos si no se encuentra el DNI
+                    document.querySelectorAll('input:not(#busqueda-dni), textarea, select').forEach(el => {
+                        if (el.type === 'checkbox') el.checked = false;
+                        else if (el.id === 'fecha_solicitud') el.valueAsDate = new Date();
+                        else if (el.id === 'jefe_rrhh') return; // Mantener selección de jefe
+                        else if (el.id === 'anexo_no') el.value = '07'; // Siempre fijar anexo en 07
+                        else el.value = '';
+                    });
+                    document.getElementById('trabajador_dni').value = dni; // Poner el DNI buscado en el campo del formulario
+                    return;
+                }
+
+                const d = await res.json();
+                document.querySelectorAll('input, textarea, select').forEach(el => {
+                    if (d[el.id] !== undefined) {
+                        if (el.type === 'checkbox') el.checked = d[el.id];
+                        else if (el.id === 'jefe_rrhh') {
+                            // Buscar el índice por nombre
+                            const index = jefesData.findIndex(j => j.nombres === d[el.id]);
+                            if (index !== -1) el.value = index;
+                            else if (d[el.id] === 'otro') el.value = 'otro';
+                        }
+                        else el.value = d[el.id];
+                    }
+                });
+
+                // Cargar el tipo de destino (RALL o Externo)
+                if (d.lugar_dirigido_externo) setDestType('externo');
+                else setDestType('rall');
+
+                // Recalcular tiempo automáticamente al cargar
+                calcularDiferenciaTiempo();
+
+            } catch (e) {
+                console.error("Error al cargar datos");
+            }
+        }
+
+        async function prepararEImprimir(fullPage = false) {
+            // Validar jefe antes de imprimir
+            const selectJefe = document.getElementById('jefe_rrhh');
+            if (selectJefe.value === 'otro' || selectJefe.value === "") {
+                alert("❌ Por favor elija un Jefe de RR.HH. antes de imprimir.");
+                return;
+            }
+
+            if (!validarFechas()) return;
+
             const getVal = id => document.getElementById(id).value;
             const checks = {
                 chk1: "ATENCIÓN MÉDICA", chk2: "ONOMÁSTICO", chk3: "LIC. ENF. FAM.",
@@ -653,18 +1612,56 @@
                 chk10: "CAPAC. NO OFIC.", chk11: "VACACIONES", chk12: "SUFRAGIO",
                 chk13: "DESC. TÉC. MED.", chk14: "LIC. PATERNIDAD", chk15: "COMITÉ"
             };
+            // Determinar qué valor de lugar usar
+            const isRall = document.getElementById('btn-rall').classList.contains('active');
+            const lugarParaImprimir = isRall ? document.getElementById('lugar_dirigido_select').value : document.getElementById('lugar_dirigido_externo').value;
 
-            const buildSlipHTML = (typeLabel) => `
-                <div class="p-copy-label">${typeLabel}</div>
+            // Obtener el objeto del jefe seleccionado
+            const selectedJefeIndex = document.getElementById('jefe_rrhh').value;
+            let jefeNombre = "";
+            let jefeCargo = "";
+            let jefeSede = "";
+            let jefeRed = "";
+
+            if (selectedJefeIndex === "otro") {
+                // Si por algún motivo llegamos aquí con "otro"
+                jefeNombre = "JEFE DE RR.HH.";
+            } else if (jefesData[selectedJefeIndex]) {
+                const j = jefesData[selectedJefeIndex];
+                jefeNombre = j.nombres;
+                jefeCargo = j.cargo;
+                jefeSede = j.sede;
+                jefeRed = j.red;
+            }
+
+            // Manejo de estilos para el tamaño de hoja
+            const existingStyle = document.getElementById('dynamic-print-style');
+            if (existingStyle) existingStyle.remove();
+
+            const style = document.createElement('style');
+            style.id = 'dynamic-print-style';
+            if (fullPage) {
+                style.innerHTML = `@media print { @page { size: A4 portrait; margin: 1cm; } }`;
+                document.body.classList.add('print-mode-full');
+            } else {
+                style.innerHTML = `@media print { @page { size: A4 landscape; margin: 0.5cm; } }`;
+                document.body.classList.remove('print-mode-full');
+            }
+            document.head.appendChild(style);
+
+            const buildSlipHTML = () => `
                 <div class="p-header">
-                    <img src="logo_essalud.png" class="p-logo">
+                    <img src="OK logo_essalud.png" class="p-logo">
                     <div class="p-title-box">
                         <h2 class="p-title">PAPELETA DE PERMISO</h2>
+                        <div style="font-size: 0.8rem; font-weight: normal; margin-top: -2px; color: #444;">
+                            ${jefeSede || jefeRed ? `${jefeSede} ${jefeSede && jefeRed ? ' - ' : ''} ${jefeRed}` : ''}
+                        </div>
                         <small>ANEXO Nº: ${getVal('anexo_no')}</small>
                     </div>
                 </div>
                 <div class="p-body">
-                    SEÑOR (A) JEFE DE LA DIVISION DE RECURSOS HUMANOS: <b>${getVal('jefe_rrhh')}</b>; 
+                    Señor(a): <b>${jefeNombre}</b> - ${jefeCargo};<br>
                     Don (ña) <b>${getVal('nombre_trabajador')}</b> quien presta servicios en: <b>${getVal('area_trabajador')}</b> 
                     A órdenes directas del Suscrito, solicita permiso por:
                 </div>
@@ -680,13 +1677,22 @@
                     <div class="p-time-cell">FECHA EMISIÓN: <b>${getVal('fecha_solicitud')}</b></div>
                 </div>
                 <div class="p-full-field">
-                    Lugar al cuál se dirige (*): <b>${getVal('lugar_dirigido')}</b><br>
+                    Lugar al cuál se dirige (*): <b>${lugarParaImprimir}</b><br>
                     Motivo: <b>${getVal('motivo_permiso')}</b>
                 </div>
-                <div class="p-sign-row">
-                    <div class="p-sign-box">Firma del Solicitante<br>DNI: ${getVal('trabajador_dni')}</div>
-                    <div class="p-sign-box">Firma Jefe Inmediato</div>
-                    <div class="p-sign-box">Jefe RR.HH. RALL</div>
+                <div class="p-sign-row" style="${!fullPage ? 'position: relative; top: -3cm;' : 'margin-top: 40px;'}">
+                    <div class="p-sign-box" style="${!fullPage ? 'width: calc(33.3% + 1.5cm); margin-right: -2.5cm; z-index: 10;' : ''}">
+                        <div class="p-sign-square" style="${!fullPage ? 'width: 100%;' : ''}"></div>
+                        Firma del Solicitante<br>DNI: <b>${getVal('trabajador_dni')}</b>
+                    </div>
+                    <div class="p-sign-box" style="${!fullPage ? 'position: relative; top: 3cm; width: calc(33.3% + 2cm);' : ''}">
+                        <div class="p-sign-square" style="${!fullPage ? 'width: 100%;' : ''}"></div>
+                        Firma Jefe Inmediato
+                    </div>
+                    <div class="p-sign-box" style="${!fullPage ? 'width: calc(33.3% + 1.5cm); margin-left: -2.5cm; z-index: 10;' : ''}">
+                        <div class="p-sign-square" style="${!fullPage ? 'width: 100%;' : ''}"></div>
+                        Jefe/Encargado RR.HH.
+                    </div>
                 </div>
                 <div class="p-footer">
                     <span>(1) Adjuntar constancia de atención</span>
@@ -700,9 +1706,15 @@
                 </div>
             `;
 
-            document.getElementById('copy-original').innerHTML = buildSlipHTML("ORIGINAL");
-            document.getElementById('copy-cargo').innerHTML = buildSlipHTML("CARGO / COPIA");
-            window.print();
+            document.getElementById('copy-original').innerHTML = buildSlipHTML();
+            if (!fullPage) {
+                document.getElementById('copy-cargo').innerHTML = buildSlipHTML();
+            }
+
+            // Un pequeño delay para que el DOM se actualice antes de imprimir
+            setTimeout(() => {
+                window.print();
+            }, 250);
         }
     </script>
 </body>

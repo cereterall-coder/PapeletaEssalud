@@ -1,0 +1,26 @@
+[
+  {
+    "nombres": "Juan Carlos Ramirez Grau",
+    "cargo": "Jefe de la Oficina de RR.HH.",
+    "sede": "GERENCIA",
+    "red": "Red Asistencial La Libertad"
+  },
+  {
+    "nombres": "Nancy Moreno",
+    "cargo": "Administradora",
+    "sede": "HOSPITAL I ALBRECHT",
+    "red": "Red Asistencial La LIbertad"
+  },
+  {
+    "nombres": "Guillermo Reyes Sheyla Karin",
+    "cargo": "Jefe de la Oficina de RR.HH.",
+    "sede": "HOSPITAL VICTOR LAZARTE",
+    "red": "Red Asistencial La LIbertad"
+  },
+  {
+    "nombres": "Miranda Rivera Segundo Uldarico",
+    "cargo": "Jefe de la Oficina de RR.HH.",
+    "sede": "HOSPITAL I FLORENCIA DE MORA",
+    "red": "Red Asistencial La Libertad"
+  }
+]
