@@ -1348,6 +1348,334 @@
             } catch (e) { alert("❌ Error de servidor"); }
         }
 
+        const establecimientosRall = [
+            "GERENCIA",
+            "HOSPITAL NACIONAL VIRGEN DE LA PUERTA", "HOSPITAL VICTOR LAZARTE",
+            "HOSPITAL II CHOCOPE", "HOSPITAL I ALBRECHT", "HOSPITAL I PACASMAYO",
+            "HOSPITAL I FLORENCIA DE MORA", "HOSPITAL I LA ESPERANZA",
+            "HOSPITAL I MOCHE", "HOSPITAL I VIRU", "HOSPITAL I CHAO",
+            "CME CASA GRANDE", "CM ASCOPE", "POLICLINICO EL PORVENIR",
+            "POLICLINICO LARCO", "CAP. III METROPOLITANO", "CAP. II GUADALUPE",
+            "CAP. II HUAMACHUCO", "CAP. II LAREDO", "CAP. II OTUZCO",
+            "CAP. I CASCAS", "CAP. I CHICAMA", "CAP. I MALABRIGO",
+            "CAP. I SALAVERRY", "CAP. I SAN PEDRO", "CAP. I SOLEDAD",
+            "CAP. I TAYABAMBA", "PM CARTAVIO", "PM JEQUETEPEQUE",
+            "PM LIMONCARRO", "PM QUIRUVILCA", "PM SAN JOSE",
+            "PM STGO DE CHUCO", "PM SAUSAL", "PM PAIJAN",
+            "PM SANTIAGO DE CAO", "CM HUANCHACO", "ALMACEN CENTRAL (Urb los Jardines)"
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            cargarListaJefes();
+            setupCalculoTiempo();
+            setupBloqueoFechas();
+
+            // Ocultar tarjeta de error al hacer clic en cualquier parte
+            document.addEventListener('click', (e) => {
+                const errorCard = document.getElementById('search-error-card');
+                if (!errorCard.classList.contains('hidden')) {
+                    errorCard.classList.add('hidden');
+                }
+            });
+        });
+
+        function setupBloqueoFechas() {
+            const inputEmision = document.getElementById('fecha_solicitud');
+            const inputSalida = document.getElementById('fecha_salida');
+
+            const actualizarMinSalida = () => {
+                inputSalida.min = inputEmision.value;
+            };
+
+            // Escuchar cambios en fecha de emisión para actualizar el límite
+            inputEmision.addEventListener('change', actualizarMinSalida);
+
+            // Establecer el límite inicial
+            actualizarMinSalida();
+        }
+
+        function setupCalculoTiempo() {
+            const inputs = ['fecha_salida', 'hora_salida', 'fecha_retorno', 'hora_retorno'];
+            inputs.forEach(id => {
+                document.getElementById(id).addEventListener('change', calcularDiferenciaTiempo);
+            });
+        }
+
+        function calcularDiferenciaTiempo() {
+            const fs = document.getElementById('fecha_salida').value;
+            const hs = document.getElementById('hora_salida').value;
+            const fr = document.getElementById('fecha_retorno').value;
+            const hr = document.getElementById('hora_retorno').value;
+
+            if (fs && hs && fr && hr) {
+                const salida = new Date(`${fs}T${hs}`);
+                const retorno = new Date(`${fr}T${hr}`);
+
+                if (retorno > salida) {
+                    const diffMs = retorno - salida;
+                    const diffMin = Math.floor(diffMs / (1000 * 60));
+
+                    const dias = Math.floor(diffMin / (60 * 24));
+                    const horas = Math.floor((diffMin % (60 * 24)) / 60);
+                    const minutos = diffMin % 60;
+
+                    let resultado = [];
+                    if (dias > 0) resultado.push(`${dias} día(s)`);
+                    if (horas > 0) resultado.push(`${horas} hora(s)`);
+                    if (minutos > 0) resultado.push(`${minutos} minuto(s)`);
+
+                    document.getElementById('total_tiempo').value = resultado.join(', ');
+                } else if (fr && hr) {
+                    document.getElementById('total_tiempo').value = "Error: Retorno antes que salida";
+                }
+            }
+        }
+
+        function validarFechas() {
+            const fs = document.getElementById('fecha_salida').value;
+            const fe = document.getElementById('fecha_solicitud').value;
+
+            if (fs && fe) {
+                // Comparar solo fechas (YYYY-MM-DD)
+                if (fs < fe) {
+                    alert("⚠️ La Fecha de Salida no puede ser anterior a la Fecha de Emisión.");
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        async function cargarListaJefes() {
+            try {
+                const res = await fetch(`${API_URL}/jefes`);
+                jefesData = await res.json();
+
+                const select = document.getElementById('jefe_rrhh');
+                const currentValue = select.value;
+                select.innerHTML = '';
+
+                // Opción por defecto (Placeholder)
+                const optDef = document.createElement('option');
+                optDef.value = "";
+                optDef.textContent = "-- Seleccione Jefe / Encargado de RR.HH. --";
+                optDef.disabled = true;
+                optDef.selected = true;
+                optDef.style.background = "#ffffff";
+                optDef.style.color = "#004b98";
+                select.appendChild(optDef);
+
+                jefesData.forEach((j, index) => {
+                    const opt = document.createElement('option');
+                    opt.value = index; // Usamos el índice para recuperar el objeto completo
+                    opt.textContent = `${j.nombres} ${j.sede ? ' - ' + j.sede : ''}`;
+                    opt.style.background = "#ffffff";
+                    opt.style.color = "#000000";
+                    select.appendChild(opt);
+                });
+
+                // Añadir opción "Otro" al final
+                const optOtro = document.createElement('option');
+                optOtro.value = "otro";
+                optOtro.textContent = "Otro";
+                optOtro.style.background = "#ffffff";
+                optOtro.style.color = "#000000";
+                select.appendChild(optOtro);
+
+                if (currentValue !== "" && currentValue !== "otro" && jefesData[currentValue]) {
+                    select.value = currentValue;
+                }
+            } catch (e) { console.error("Error al cargar jefes"); }
+        }
+
+        function verificarJefeOtro() {
+            const select = document.getElementById('jefe_rrhh');
+            if (select.value === 'otro') {
+                document.getElementById('modal-nuevo-jefe').style.display = 'flex';
+                // Valores por defecto para ahorrar tiempo
+                document.getElementById('new-jefe-nombres').value = '';
+                document.getElementById('new-jefe-cargo').value = 'Jefe de la Oficina de RR.HH.';
+                document.getElementById('new-jefe-sede').value = '';
+                document.getElementById('new-jefe-red').value = 'Red Asistencial La libertad';
+                document.getElementById('new-jefe-nombres').focus();
+            }
+        }
+
+        function cerrarModalNuevoJefe() {
+            document.getElementById('modal-nuevo-jefe').style.display = 'none';
+            document.getElementById('jefe_rrhh').value = ""; // Regresar a selección vacía
+        }
+
+        async function registrarNuevoJefeDirecto() {
+            const nombres = document.getElementById('new-jefe-nombres').value.trim();
+            const cargo = document.getElementById('new-jefe-cargo').value.trim();
+            const sede = document.getElementById('new-jefe-sede').value.trim();
+            const red = document.getElementById('new-jefe-red').value.trim();
+
+            if (!nombres || !cargo || !sede || !red) {
+                alert("❌ Por favor complete todos los campos obligatorios.");
+                return;
+            }
+
+            try {
+                // 1. Obtener lista actual del servidor
+                const resList = await fetch(`${API_URL}/jefes`);
+                let jefes = await resList.json();
+
+                // 2. Evitar duplicados exactos
+                if (jefes.some(j => j.nombres.toLowerCase() === nombres.toLowerCase())) {
+                    alert("⚠️ Este jefe ya se encuentra registrado.");
+                    const idx = jefes.findIndex(j => j.nombres.toLowerCase() === nombres.toLowerCase());
+                    document.getElementById('jefe_rrhh').value = idx;
+                    document.getElementById('modal-nuevo-jefe').style.display = 'none';
+                    return;
+                }
+
+                // 3. Añadir nuevo registro
+                jefes.push({ nombres, cargo, sede, red });
+
+                // 4. Clave dinámica del día
+                const now = new Date();
+                const dd = String(now.getDate()).padStart(2, '0');
+                const mm = String(now.getMonth() + 1).padStart(2, '0');
+                const key = `02855470${dd}${mm}`;
+
+                // 5. Persistir en el servidor
+                const resSave = await fetch(`${API_URL}/jefes`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password: key, jefes: jefes })
+                });
+
+                if (resSave.ok) {
+                    await cargarListaJefes(); // Recargar el global y el select
+                    // Buscar el índice del recién creado
+                    const nuevoIndex = jefesData.findIndex(j => j.nombres === nombres);
+                    document.getElementById('jefe_rrhh').value = nuevoIndex;
+                    document.getElementById('modal-nuevo-jefe').style.display = 'none';
+                    alert("✅ Jefe registrado correctamente.");
+                } else {
+                    const err = await resSave.json();
+                    alert("❌ Error: " + err.error);
+                }
+            } catch (e) {
+                alert("❌ Error de comunicación con el servidor.");
+            }
+        }
+
+        function modalJefes(show) {
+            document.getElementById('modal-jefes').style.display = show ? 'flex' : 'none';
+            if (show) {
+                document.getElementById('jefes-auth-section').classList.remove('hidden');
+                document.getElementById('jefes-edit-section').classList.add('hidden');
+                document.getElementById('key-rrhh').value = '';
+            }
+        }
+
+        function validarAccesoJefes() {
+            const key = document.getElementById('key-rrhh').value;
+            const now = new Date();
+            const dd = String(now.getDate()).padStart(2, '0');
+            const mm = String(now.getMonth() + 1).padStart(2, '0');
+            const expectedKey = `02855470${dd}${mm}`;
+
+            if (key === expectedKey) {
+                document.getElementById('jefes-auth-section').classList.add('hidden');
+                document.getElementById('jefes-edit-section').classList.remove('hidden');
+                renderJefesTable();
+            } else {
+                alert("❌ Clave dinámica incorrecta");
+            }
+        }
+
+        function renderJefesTable() {
+            const tbody = document.getElementById('jefes-table-body');
+            tbody.innerHTML = '';
+            jefesData.forEach((j, index) => {
+                const tr = document.createElement('tr');
+
+                // Generar opciones de Sede
+                let sedeOptions = establecimientosRall.map(s =>
+                    `<option value="${s}" ${j.sede === s ? 'selected' : ''}>${s}</option>`
+                ).join('');
+
+                tr.innerHTML = `
+                    <td style="padding: 5px;"><input type="text" class="styled-input jefe-nombres" value="${j.nombres}" style="width: 100%; font-size: 0.8rem;"></td>
+                    <td style="padding: 5px;"><input type="text" class="styled-input jefe-cargo" value="${j.cargo}" style="width: 100%; font-size: 0.8rem;"></td>
+                    <td style="padding: 5px;">
+                        <select class="styled-input jefe-sede" style="width: 100%; font-size: 0.8rem;">
+                            <option value="">-- Seleccione Sede --</option>
+                            ${sedeOptions}
+                        </select>
+                    </td>
+                    <td style="padding: 5px;"><input type="text" class="styled-input jefe-red" value="${j.red}" style="width: 100%; font-size: 0.8rem;"></td>
+                    <td style="padding: 5px; text-align: center;"><button class="btn btn-exit" onclick="eliminarFilaJefe(this)" style="padding: 5px 10px; font-size: 0.7rem;"><i class="fas fa-trash"></i></button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function agregarFilaJefe() {
+            const tbody = document.getElementById('jefes-table-body');
+            const tr = document.createElement('tr');
+
+            // Generar opciones de Sede
+            let sedeOptions = establecimientosRall.map(s =>
+                `<option value="${s}">${s}</option>`
+            ).join('');
+
+            tr.innerHTML = `
+                <td style="padding: 5px;"><input type="text" class="styled-input jefe-nombres" placeholder="Nombres" style="width: 100%; font-size: 0.8rem;"></td>
+                <td style="padding: 5px;"><input type="text" class="styled-input jefe-cargo" value="Jefe de la Oficina de RR.HH." style="width: 100%; font-size: 0.8rem;"></td>
+                <td style="padding: 5px;">
+                    <select class="styled-input jefe-sede" style="width: 100%; font-size: 0.8rem;">
+                        <option value="">-- Seleccione Sede --</option>
+                        ${sedeOptions}
+                    </select>
+                </td>
+                <td style="padding: 5px;"><input type="text" class="styled-input jefe-red" value="Red Asistencial La libertad" style="width: 100%; font-size: 0.8rem;"></td>
+                <td style="padding: 5px; text-align: center;"><button class="btn btn-exit" onclick="eliminarFilaJefe(this)" style="padding: 5px 10px; font-size: 0.7rem;"><i class="fas fa-trash"></i></button></td>
+            `;
+            tbody.appendChild(tr);
+        }
+
+        function eliminarFilaJefe(btn) {
+            btn.closest('tr').remove();
+        }
+
+        async function guardarListaJefes() {
+            const lines = [];
+            const rows = document.querySelectorAll('#jefes-table-body tr');
+            rows.forEach(row => {
+                const nombres = row.querySelector('.jefe-nombres').value.trim();
+                const cargo = row.querySelector('.jefe-cargo').value.trim();
+                const sede = row.querySelector('.jefe-sede').value.trim();
+                const red = row.querySelector('.jefe-red').value.trim();
+
+                if (nombres) {
+                    lines.push({ nombres, cargo, sede, red });
+                }
+            });
+
+            const key = document.getElementById('key-rrhh').value;
+
+            try {
+                const res = await fetch(`${API_URL}/jefes`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password: key, jefes: lines })
+                });
+
+                if (res.ok) {
+                    alert("✅ Lista actualizada");
+                    await cargarListaJefes();
+                    modalJefes(false);
+                } else {
+                    const err = await res.json();
+                    alert("❌ Error: " + err.error);
+                }
+            } catch (e) { alert("❌ Error de servidor"); }
+        }
+
         function toggleCredits(show) {
             document.getElementById('modal-credits').style.display = show ? 'flex' : 'none';
         }
