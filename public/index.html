@@ -139,6 +139,21 @@
             filter: brightness(1.2);
         }
 
+        .help-icon {
+            font-size: 1.6rem;
+            color: var(--secondary);
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .help-icon:hover {
+            transform: scale(1.2);
+            color: var(--primary);
+        }
+
         /* --- CREDITS MODAL --- */
         .modal-credits {
             display: none;
@@ -285,6 +300,14 @@
             font-family: 'Roboto', sans-serif;
             outline: none;
             transition: 0.2s;
+        }
+
+        #nombre_trabajador,
+        #new-jefe-nombres,
+        #area_trabajador,
+        #input-otro-establecimiento,
+        #lugar_dirigido_externo {
+            text-transform: uppercase;
         }
 
         .styled-input:focus {
@@ -685,6 +708,8 @@
             <input type="text" id="busqueda-dni" class="search-input" maxlength="8"
                 placeholder="Ingresar DNI para cargar datos anteriores...">
             <button class="btn btn-load" onclick="cargarDatos(event)"><i class="fas fa-folder-open"></i> Cargar</button>
+            <i class="fas fa-question-circle help-icon" onclick="window.open('/manual.html', '_blank')"
+                title="Ver Manual de Usuario"></i>
         </div>
 
         <div id="search-error-card" class="hidden">
@@ -1660,10 +1685,10 @@
                 jefeNombre = "JEFE DE RR.HH.";
             } else if (jefesData[selectedJefeIndex]) {
                 const j = jefesData[selectedJefeIndex];
-                jefeNombre = j.nombres;
-                jefeCargo = j.cargo;
-                jefeSede = j.sede;
-                jefeRed = j.red;
+                jefeNombre = (j.nombres || "").toUpperCase();
+                jefeCargo = (j.cargo || "").toUpperCase();
+                jefeSede = (j.sede || "").toUpperCase();
+                jefeRed = (j.red || "").toUpperCase();
             }
 
             // Manejo de estilos para el tamaño de hoja
@@ -1687,14 +1712,14 @@
                     <div class="p-title-box">
                         <h2 class="p-title">PAPELETA DE PERMISO</h2>
                         <div style="font-size: 0.8rem; font-weight: normal; margin-top: -2px; color: #444;">
-                            ${jefeSede || jefeRed ? `${jefeSede} ${jefeSede && jefeRed ? ' - ' : ''} ${jefeRed}` : ''}
+                            ${(jefeSede || jefeRed) ? `${jefeSede} ${jefeSede && jefeRed ? ' - ' : ''} ${jefeRed}` : ''}
                         </div>
                         <small>ANEXO Nº: ${getVal('anexo_no')}</small>
                     </div>
                 </div>
                 <div class="p-body">
-                    Señor(a): <b>${jefeNombre}</b> - ${jefeCargo};<br>
-                    Don (ña) <b>${getVal('nombre_trabajador')}</b> quien presta servicios en: <b>${getVal('area_trabajador')}</b> 
+                    Señor(a): <b>${jefeNombre.toUpperCase()}</b> - ${jefeCargo.toUpperCase()};<br>
+                    Don (ña) <b>${getVal('nombre_trabajador').toUpperCase()}</b> quien presta servicios en: <b>${getVal('area_trabajador').toUpperCase()}</b> 
                     A órdenes directas del Suscrito, solicita permiso por:
                 </div>
                 <div class="p-check-grid">
