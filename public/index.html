@@ -340,6 +340,21 @@
             cursor: pointer;
             color: var(--text-dark);
             font-weight: 500;
+            transition: 0.2s;
+            padding: 5px;
+            border-radius: 4px;
+        }
+
+        .check-card:hover {
+            background: rgba(0, 75, 152, 0.05);
+            color: var(--primary);
+        }
+
+        .check-card sub {
+            color: var(--secondary);
+            font-weight: bold;
+            margin-left: 2px;
+            font-size: 0.7rem;
         }
 
         /* Estilos para botones de selección de lugar */
@@ -751,20 +766,36 @@
             <div class="full-width">
                 <label><i class="fas fa-list-check"></i> Motivo del Permiso</label>
                 <div class="permission-types">
-                    <label class="check-card"><input type="checkbox" id="chk1"> Atención Médica</label>
-                    <label class="check-card"><input type="checkbox" id="chk2"> Onomástico</label>
-                    <label class="check-card"><input type="checkbox" id="chk3"> Lic. Enf. Fam.</label>
-                    <label class="check-card"><input type="checkbox" id="chk4"> Comisión Servicio</label>
-                    <label class="check-card"><input type="checkbox" id="chk5"> Permiso por Días</label>
-                    <label class="check-card"><input type="checkbox" id="chk6"> Lic. Judicial</label>
+                    <label class="check-card" title="(1) Adjuntar constancia de atención"><input type="checkbox"
+                            id="chk1"> Atención Médica <sub>(1)</sub></label>
+                    <label class="check-card"
+                        title="(3) Se deberá efectuar la devolución de hora / Reg. Laboral 728 y CAS"><input
+                            type="checkbox" id="chk2"> Onomástico <sub>(3)</sub></label>
+                    <label class="check-card" title="(7) Regularizar posteriormente con resolución"><input
+                            type="checkbox" id="chk3"> Lic. Enf. Fam. Dir. <sub>(7)</sub></label>
+                    <label class="check-card" title="(2) Indicar lugar y motivo de la comisión"><input type="checkbox"
+                            id="chk4"> Comisión por Servicios <sub>(2)</sub></label>
+                    <label class="check-card"
+                        title="(5) Permiso por Días: Indicar número de días y días de inicio y término (Más 10 días)"><input
+                            type="checkbox" id="chk5"> Permiso por Días <sub>(5)</sub></label>
+                    <label class="check-card" title="(1) Adjuntar constancia de atención"><input type="checkbox"
+                            id="chk6"> Lic. Jud. / Lic. Pol. <sub>(1)</sub></label>
                     <label class="check-card"><input type="checkbox" id="chk7"> Capac. Oficial</label>
-                    <label class="check-card"><input type="checkbox" id="chk8"> Permiso Minutos</label>
-                    <label class="check-card"><input type="checkbox" id="chk9"> Sindicato</label>
-                    <label class="check-card"><input type="checkbox" id="chk10"> Capac. No Oficial</label>
+                    <label class="check-card"
+                        title="(6) Permiso por horas: indicar número de horas y hora de salida o entrada"><input
+                            type="checkbox" id="chk8"> Perm. por Minutos <sub>(6)</sub></label>
+                    <label class="check-card" title="(7) Regularizar posteriormente con resolución"><input
+                            type="checkbox" id="chk9"> Sindical <sub>(7)</sub></label>
+                    <label class="check-card"
+                        title="(3) Se deberá efectuar la devolución de hora / Reg. Laboral 728 y CAS"><input
+                            type="checkbox" id="chk10"> Capacitación No Oficial <sub>(3)</sub></label>
                     <label class="check-card"><input type="checkbox" id="chk11"> Vacaciones</label>
                     <label class="check-card"><input type="checkbox" id="chk12"> Sufragio</label>
-                    <label class="check-card"><input type="checkbox" id="chk13"> Descanso Tec. Med</label>
-                    <label class="check-card"><input type="checkbox" id="chk14"> Lic. Paternidad</label>
+                    <label class="check-card"
+                        title="(4) Ley Nº 28456 - Disposiciones Transitorias, Complementarias y Finales"><input
+                            type="checkbox" id="chk13"> Descanso Tec. Med <sub>(4)</sub></label>
+                    <label class="check-card" title="(7) Regularizar posteriormente con resolución"><input
+                            type="checkbox" id="chk14"> Lic. por Paternidad <sub>(7)</sub></label>
                     <label class="check-card"><input type="checkbox" id="chk15"> Comité</label>
                 </div>
             </div>
@@ -786,7 +817,7 @@
                 <input type="time" id="hora_retorno" class="styled-input">
             </div>
             <div class="input-group">
-                <label><i class="fas fa-hourglass-half"></i> Total Horas/Días</label>
+                <label><i class="fas fa-hourglass-half"></i> N° Total días / minutos: </label>
                 <input type="text" id="total_tiempo" class="styled-input">
             </div>
             <div class="input-group">
@@ -992,6 +1023,9 @@
     <div id="modal-credits" class="modal-credits">
         <div class="credits-card">
             <h2>Oficina de Soporte Informático</h2>
+            <p
+                style="font-size: 10px; margin-top: -15px; margin-bottom: 20px; font-weight: 700; color: var(--text-muted);">
+                RED ASISTENCIAL LA LIBERTAD</p>
             <h3>Equipo de Trabajo:</h3>
             <ul>
                 <li>Ing. Dini Lawrence Vargas Tumba – Jefe de Oficina</li>
@@ -1035,7 +1069,7 @@
                 </div>
                 <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 15px;">
                     <button class="btn btn-load" style="padding: 8px 16px; font-size: 0.8rem;"
-                        onclick="agregarFilaJefe()"><i class="fas fa-plus"></i> Añadir Nuevo Jefe</button>
+                        onclick="agregarFilaJefe()"><i class="fas fa-plus"></i> AGREGAR NUEVO</button>
                     <button class="btn btn-save" style="padding: 8px 16px; font-size: 0.8rem;"
                         onclick="guardarListaJefes()"><i class="fas fa-save"></i> Guardar Todos los Cambios</button>
                 </div>
@@ -1089,15 +1123,22 @@
         function setupBloqueoFechas() {
             const inputEmision = document.getElementById('fecha_solicitud');
             const inputSalida = document.getElementById('fecha_salida');
+            const inputRetorno = document.getElementById('fecha_retorno');
 
             const actualizarMinSalida = () => {
                 inputSalida.min = inputEmision.value;
+                actualizarMinRetorno();
             };
 
-            // Escuchar cambios en fecha de emisión para actualizar el límite
-            inputEmision.addEventListener('change', actualizarMinSalida);
+            const actualizarMinRetorno = () => {
+                inputRetorno.min = inputSalida.value;
+            };
 
-            // Establecer el límite inicial
+            // Escuchar cambios para actualizar los límites mínimos
+            inputEmision.addEventListener('change', actualizarMinSalida);
+            inputSalida.addEventListener('change', actualizarMinRetorno);
+
+            // Establecer límites iniciales
             actualizarMinSalida();
         }
 
@@ -1162,11 +1203,19 @@
         function validarFechas() {
             const fs = document.getElementById('fecha_salida').value;
             const fe = document.getElementById('fecha_solicitud').value;
+            const fr = document.getElementById('fecha_retorno').value;
 
             if (fs && fe) {
                 // Comparar solo fechas (YYYY-MM-DD)
                 if (fs < fe) {
                     alert("⚠️ La Fecha de Salida no puede ser anterior a la Fecha de Emisión.");
+                    return false;
+                }
+            }
+
+            if (fs && fr) {
+                if (fr < fs) {
+                    alert("⚠️ La Fecha de Retorno no puede ser anterior a la Fecha de Salida.");
                     return false;
                 }
             }
@@ -1223,7 +1272,7 @@
                 document.getElementById('new-jefe-nombres').value = '';
                 document.getElementById('new-jefe-cargo').value = 'Jefe de la Oficina de RR.HH.';
                 document.getElementById('new-jefe-sede').value = '';
-                document.getElementById('new-jefe-red').value = 'Red Asistencial La libertad';
+                document.getElementById('new-jefe-red').value = 'Red Asistencial La Libertad';
                 document.getElementById('new-jefe-nombres').focus();
             }
         }
@@ -1360,10 +1409,16 @@
                         ${sedeOptions}
                     </select>
                 </td>
-                <td style="padding: 5px;"><input type="text" class="styled-input jefe-red" value="Red Asistencial La libertad" style="width: 100%; font-size: 0.8rem;"></td>
+                <td style="padding: 5px;"><input type="text" class="styled-input jefe-red" value="Red Asistencial La Libertad" style="width: 100%; font-size: 0.8rem;"></td>
                 <td style="padding: 5px; text-align: center;"><button class="btn btn-exit" onclick="eliminarFilaJefe(this)" style="padding: 5px 10px; font-size: 0.7rem;"><i class="fas fa-trash"></i></button></td>
             `;
-            tbody.appendChild(tr);
+            tbody.prepend(tr);
+
+            // Hacer scroll hacia arriba para ver el nuevo campo inmediatamente
+            const scrollContainer = tbody.closest('div');
+            if (scrollContainer) scrollContainer.scrollTop = 0;
+
+            tr.querySelector('.jefe-nombres').focus();
         }
 
         function eliminarFilaJefe(btn) {
@@ -1663,11 +1718,11 @@
 
             const getVal = id => document.getElementById(id).value;
             const checks = {
-                chk1: "ATENCIÓN MÉDICA", chk2: "ONOMÁSTICO", chk3: "LIC. ENF. FAM.",
-                chk4: "COMISIÓN SERV.", chk5: "PERMISO DÍAS", chk6: "LIC. JUDICIAL",
-                chk7: "CAPAC. OFICIAL", chk8: "PERMISO MINUTOS", chk9: "SINDICATO",
-                chk10: "CAPAC. NO OFIC.", chk11: "VACACIONES", chk12: "SUFRAGIO",
-                chk13: "DESC. TÉC. MED.", chk14: "LIC. PATERNIDAD", chk15: "COMITÉ"
+                chk1: "ATENCIÓN MÉDICA <sub>(1)</sub>", chk2: "ONOMÁSTICO <sub>(3)</sub>", chk3: "LIC. ENF. FAM. DIR. <sub>(7)</sub>",
+                chk4: "COMISIÓN POR SERVICIOS <sub>(2)</sub>", chk5: "PERMISO POR DÍAS <sub>(5)</sub>", chk6: "LIC. JUD. / LIC. POL. <sub>(1)</sub>",
+                chk7: "CAPAC. OFICIAL", chk8: "PERM. POR MINUTOS <sub>(6)</sub>", chk9: "SINDICAL <sub>(7)</sub>",
+                chk10: "CAPACITACIÓN NO OFICIAL <sub>(3)</sub>", chk11: "VACACIONES", chk12: "SUFRAGIO",
+                chk13: "DESC. TÉC. MED. <sub>(4)</sub>", chk14: "LIC. POR PATERNIDAD <sub>(7)</sub>", chk15: "COMITÉ"
             };
             // Determinar qué valor de lugar usar
             const isRall = document.getElementById('btn-rall').classList.contains('active');
@@ -1729,7 +1784,7 @@
                 </div>
                 <div class="p-time-grid">
                     <div class="p-time-cell">SALIDA: <b>${getVal('fecha_salida')} ${getVal('hora_salida')}</b></div>
-                    <div class="p-time-cell">Nº TOTAL: <b>${getVal('total_tiempo')}</b></div>
+                    <div class="p-time-cell">N° Total días / minutos: <b>${getVal('total_tiempo')}</b></div>
                     <div class="p-time-cell">RETORNO: <b>${getVal('fecha_retorno')} ${getVal('hora_retorno')}</b></div>
                     <div class="p-time-cell">FECHA EMISIÓN: <b>${getVal('fecha_solicitud')}</b></div>
                 </div>
